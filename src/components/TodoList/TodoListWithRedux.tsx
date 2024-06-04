@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppRootStateType } from '../../model/store';
-import { addTaskAC, changeTaskStatusAC, changeTaskTitleAC } from '../../model/task-reducer';
+import { addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC } from '../../model/task-reducer';
 import { changeTodolistFilterAC, changeTodolistTitleAC, removeTodolistAC } from '../../model/todolists-reducer';
 
 export type TodoListPropsType = {
@@ -23,11 +23,9 @@ export const TodoListWithRedux = ( {list}: TodoListPropsType ) => {
     const addTaskHandler = ( taskTitle: string ) => {
         dispatch(addTaskAC(list.listID, taskTitle))
     }
-
     const removeTaskHandler = ( taskID: string ) => {
-        dispatch(addTaskAC(list.listID, taskID))
+        dispatch(removeTaskAC(list.listID, taskID))
     }
-
     const changeFilterHandler = ( filter: FilterType ) => {
         dispatch(changeTodolistFilterAC(listID, filter))
     }
