@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FilterType, TasksType, TaskType, TodoListType } from '../../AppWithRedux';
 import { Button, Checkbox, List, ListItem } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, memo, useCallback, useState } from 'react';
 import { AddItemForm } from '../AddItemForm';
 import { EditableSpan } from '../EditableSpan';
 import IconButton from '@mui/material/IconButton'
@@ -15,14 +15,16 @@ export type TodoListPropsType = {
     list: TodoListType
 }
 
-export const TodoListWithRedux = ( {list}: TodoListPropsType ) => {
+export const TodoListWithRedux = memo(( {list}: TodoListPropsType ) => {
+    console.log('TodoListWithRedux')
     const {listID, title, filter} = list
     let tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[listID])
     const dispatch = useDispatch()
 
-    const addTaskHandler = ( taskTitle: string ) => {
+    const addTaskHandler = useCallback(( taskTitle: string ) => {
         dispatch(addTaskAC(list.listID, taskTitle))
-    }
+    }, [dispatch, list.listID])
+
     const removeTaskHandler = ( taskID: string ) => {
         dispatch(removeTaskAC(list.listID, taskID))
     }
@@ -109,4 +111,4 @@ export const TodoListWithRedux = ( {list}: TodoListPropsType ) => {
             </div>
         </div>
     )
-}
+})

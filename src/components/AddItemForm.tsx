@@ -1,13 +1,13 @@
-import * as React from 'react';
+// import * as React from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { ChangeEvent, KeyboardEvent, useState } from 'react';
-import { Grid, IconButton, TextField } from '@mui/material';
+import React, { ChangeEvent, KeyboardEvent, memo, useState } from 'react';
+import { IconButton, TextField } from '@mui/material';
 
 type AddItemFormPropsType = {
     addItem: ( title: string ) => void
 };
 
-export const AddItemForm = ( {addItem}: AddItemFormPropsType ) => {
+export const AddItemForm = memo(( {addItem}: AddItemFormPropsType ) => {
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<string | null>(null)
 
@@ -47,4 +47,4 @@ export const AddItemForm = ( {addItem}: AddItemFormPropsType ) => {
         </IconButton>
     </>
 
-}
+})
