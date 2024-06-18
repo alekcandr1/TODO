@@ -14,7 +14,7 @@ const meta = {
 
     },
     args: {
-        // title: string,
+        title: 'React',
         onChange: fn()
     },
 } satisfies Meta<typeof EditableSpan>;
@@ -24,6 +24,6 @@ type Story = StoryObj<typeof meta>;
 
 export const EditableSpan1: Story = {
     args: {
-        title: 'Text',
+        title: 'React',
     }
 };
