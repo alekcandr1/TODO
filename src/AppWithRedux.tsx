@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import './App.css';
-import { AddItemForm } from './components/AddItemForm';
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Button from '@mui/material/Button'
@@ -11,8 +10,9 @@ import Grid from '@mui/material/Unstable_Grid2'
 import { Paper } from '@mui/material';
 import { addTodolistAC } from './model/todolists-reducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppRootStateType, store } from './model/store';
+import { AppRootStateType } from './model/store';
 import { TodoListWithRedux } from './components/TodoList/TodoListWithRedux';
+import { AddItemForm } from './components/AddItemForm';
 
 export type FilterType = 'ALL' | 'ACTIVE' | 'COMPLETED'
 export type TodoLists = TodoListType[]

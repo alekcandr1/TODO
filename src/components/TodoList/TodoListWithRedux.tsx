@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { FilterType, TasksType, TaskType, TodoListType } from '../../AppWithRedux';
-import { Button, Checkbox, List, ListItem } from '@mui/material';
-import { ChangeEvent, memo, useCallback, useMemo, useState } from 'react';
+import { FilterType, TaskType, TodoListType } from '../../AppWithRedux';
+import { List, ListItem } from '@mui/material';
+import { memo, useCallback, useMemo } from 'react';
 import { AddItemForm } from '../AddItemForm';
 import { EditableSpan } from '../EditableSpan';
 import IconButton from '@mui/material/IconButton'

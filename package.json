@@ -29,7 +29,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "jest:integration": "jest -c integration/jest.config.js",
+    "test:integration": "start-server-and-test storybook http-get://localhost:6006 jest:integration"
   },
   "eslintConfig": {
     "extends": [
@@ -57,6 +59,7 @@
     "@storybook/addon-links": "^8.1.7",
     "@storybook/addon-onboarding": "^8.1.7",
     "@storybook/blocks": "^8.1.7",
+    "@storybook/jest": "^0.2.3",
     "@storybook/preset-create-react-app": "^8.1.7",
     "@storybook/react": "^8.1.7",
     "@storybook/react-webpack5": "^8.1.7",
