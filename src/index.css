@@ -5,8 +5,21 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), url("./assets/img/bg.webp") no-repeat center/cover;
+
+  min-height: 100vh;
 }
 
+#root input {
+  background: #fff;
+  border-radius: 5px;
+}
+h3 {
+  color: #fff;
+}
+h3 span {
+  color: #000;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

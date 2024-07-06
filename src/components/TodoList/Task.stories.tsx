@@ -1,11 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Task } from './Task';
 import { ReduxStoreProviderDecorator } from '../../ReduxStoreProviderDecorator';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppRootStateType } from '../../model/store';
 import { TaskType } from '../../AppWithRedux';
-import { v1 } from 'uuid';
 import { addTaskAC } from '../../model/task-reducer';
 
 //META

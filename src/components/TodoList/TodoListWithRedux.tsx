@@ -1,31 +1,38 @@
 import * as React from 'react';
-import { FilterType, TaskType, TodoListType } from '../../AppWithRedux';
+import { FilterType, TaskType } from '../../AppWithRedux';
 import { List, ListItem } from '@mui/material';
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useEffect, useMemo } from 'react';
 import { AddItemForm } from '../AddItemForm';
 import { EditableSpan } from '../EditableSpan';
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { useDispatch, useSelector } from 'react-redux';
-import { AppRootStateType } from '../../model/store';
-import { addTaskAC } from '../../model/task-reducer';
-import { changeTodolistFilterAC, changeTodolistTitleAC, removeTodolistAC } from '../../model/todolists-reducer';
+import { useSelector } from 'react-redux';
+import { AppRootStateType, useAppDispatch } from '../../model/store';
+import { addTaskAC, getTasksTC } from '../../model/task-reducer';
+import {
+    changeTodolistFilterAC,
+    changeTodoTitleTC,
+    deleteTodoTC,
+    TodoListDomainType
+} from '../../model/todolists-reducer';
 import ButtonContainer from '../ButtonContainer';
 import { Task } from './Task';
 
 export type TodoListPropsType = {
-    list: TodoListType
+    list: TodoListDomainType
 }
 
 export const TodoListWithRedux = memo(( {list}: TodoListPropsType ) => {
-    console.log('TodoListWithRedux')
+    const dispatch = useAppDispatch()
+    const {id, title, filter} = list
 
-    const dispatch = useDispatch()
-    const {listID, title, filter} = list
-    let tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[listID])
+    useEffect(() => {
+        dispatch(getTasksTC(id))
+    }, [dispatch, id])
+
+    let tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
 
     tasks = useMemo(() => {
-        console.log('useMemo')
         if (list.filter === 'ACTIVE') {
             tasks = tasks.filter(t => !t.isDone)
         }
@@ -36,23 +43,23 @@ export const TodoListWithRedux = memo(( {list}: TodoListPropsType ) => {
     }, [tasks, list.filter])
 
     const addTaskHandler = useCallback(( taskTitle: string ) => {
-        dispatch(addTaskAC(list.listID, taskTitle))
-    }, [dispatch, list.listID])
+        dispatch(addTaskAC(list.id, taskTitle))
+    }, [dispatch, list.id])
 
     const changeFilterHandler = useCallback(( filter: FilterType ) => {
-        dispatch(changeTodolistFilterAC(listID, filter))
-    }, [dispatch, listID])
+        dispatch(changeTodolistFilterAC(id, filter))
+    }, [dispatch, id])
 
     const changeTodoListTitleHandler = useCallback(( newTitle: string ) => {
-        dispatch(changeTodolistTitleAC(listID, newTitle))
-    }, [dispatch, listID])
+        dispatch(changeTodoTitleTC(id, newTitle))
+    }, [dispatch, id])
 
     const removeTodolistHandler = useCallback(() => {
-        dispatch(removeTodolistAC(listID))
-    }, [dispatch, listID])
+        dispatch(deleteTodoTC(id))
+    }, [dispatch, id])
 
     return (
-        <div key={ listID } className={ 'todolist' }>
+        <div key={ id } className={ 'todolist' }>
             <div className={ 'todolist-title-container' }>
                 <h3>
                     <EditableSpan title={ title } onChange={ changeTodoListTitleHandler } />
@@ -76,7 +83,7 @@ export const TodoListWithRedux = memo(( {list}: TodoListPropsType ) => {
                                     <Task
                                         key={ task.id }
                                         task={ task }
-                                        listID={ listID }
+                                        listID={ id }
                                     />
                                 </ListItem>
                             )
