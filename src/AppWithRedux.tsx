@@ -8,7 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Unstable_Grid2'
 import { Paper } from '@mui/material';
-import { addTodolistAC, addTodoTC, getTodosTC, TodoListDomainType } from './model/todolists-reducer';
+import { addTodoTC, getTodosTC, TodoListDomainType } from './model/todolists-reducer';
 import { useSelector } from 'react-redux';
 import { AppRootStateType, useAppDispatch } from './model/store';
 import { TodoListWithRedux } from './components/TodoList/TodoListWithRedux';
@@ -21,14 +21,6 @@ export type FilterType = 'ALL' | 'ACTIVE' | 'COMPLETED'
 //     title: string
 //     filter: FilterType
 // }
-export type TaskType = {
-    id: string,
-    title: string,
-    isDone: boolean
-}
-export type TasksType = {
-    [key: string]: TaskType[]
-}
 
 function AppWithRedux() {
     let dispatch = useAppDispatch()

@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { FilterType, TaskType } from '../../AppWithRedux';
+import { FilterType } from '../../AppWithRedux';
 import { Button, Checkbox, List, ListItem } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import { AddItemForm } from '../AddItemForm';
 import { EditableSpan } from '../EditableSpan';
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { TaskType } from '../../api/api';
 
 export type TodoListPropsType = {
     id: string
@@ -84,9 +85,9 @@ export const TodoList = ( {
                                     key={ task.id }
                                     disableGutters
                                     disablePadding
-                                    className={ task.isDone ? 'is-done' : '' }
+                                    className={ task.status === 2 ? 'is-done' : '' }
                                 >
-                                    <Checkbox checked={ task.isDone }
+                                    <Checkbox checked={ task.status === 2 }
                                               onChange={ ( e ) => changeTaskStatusHandler(task.id, e) } />
                                     <EditableSpan title={ task.title }
                                                   onChange={ ( e ) => changeTaskTitleHandler(task.id, e) } />

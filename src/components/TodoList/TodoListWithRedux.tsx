@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FilterType, TaskType } from '../../AppWithRedux';
+import { FilterType } from '../../AppWithRedux';
 import { List, ListItem } from '@mui/material';
 import { memo, useCallback, useEffect, useMemo } from 'react';
 import { AddItemForm } from '../AddItemForm';
@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useSelector } from 'react-redux';
 import { AppRootStateType, useAppDispatch } from '../../model/store';
-import { addTaskAC, getTasksTC } from '../../model/task-reducer';
+import { addTaskAC, addTaskTC, getTasksTC } from '../../model/task-reducer';
 import {
     changeTodolistFilterAC,
     changeTodoTitleTC,
@@ -17,6 +17,7 @@ import {
 } from '../../model/todolists-reducer';
 import ButtonContainer from '../ButtonContainer';
 import { Task } from './Task';
+import { TaskType } from '../../api/api';
 
 export type TodoListPropsType = {
     list: TodoListDomainType
@@ -34,16 +35,16 @@ export const TodoListWithRedux = memo(( {list}: TodoListPropsType ) => {
 
     tasks = useMemo(() => {
         if (list.filter === 'ACTIVE') {
-            tasks = tasks.filter(t => !t.isDone)
+            tasks = tasks.filter(t => t.status === 0)
         }
         if (list.filter === 'COMPLETED') {
-            tasks = tasks.filter(t => t.isDone)
+            tasks = tasks.filter(t => t.status === 2)
         }
         return tasks
     }, [tasks, list.filter])
 
     const addTaskHandler = useCallback(( taskTitle: string ) => {
-        dispatch(addTaskAC(list.id, taskTitle))
+        dispatch(addTaskTC(list.id, taskTitle))
     }, [dispatch, list.id])
 
     const changeFilterHandler = useCallback(( filter: FilterType ) => {
@@ -78,7 +79,7 @@ export const TodoListWithRedux = memo(( {list}: TodoListPropsType ) => {
                                     key={ task.id }
                                     disableGutters
                                     disablePadding
-                                    className={ task.isDone ? 'is-done' : '' }
+                                    className={ task.status === 2 ? 'is-done' : '' }
                                 >
                                     <Task
                                         key={ task.id }
