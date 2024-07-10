@@ -4,6 +4,7 @@ import {
 } from './todolists-reducer';
 import { Dispatch } from 'redux';
 import { api, TasksType, TaskType, UpdateTaskModelType } from '../api/api';
+import { AppThunk } from './store';
 
 
 const initialState: TasksType = {}
@@ -96,6 +97,7 @@ export const tasksReducer = ( state: TasksType = initialState, action: TasksActi
             return state
     }
 }
+
 export const setTasksAC = ( listID: string, tasks: TaskType[] ) => {
     return {type: 'SET-TASKS', listID, tasks} as const
 }
@@ -136,31 +138,24 @@ export const changeTaskAC = ( listID: string, taskID: string, task: TaskType ) =
     } as const
 }
 
-export const getTasksTC = ( listID: string ) => {
-    return ( dispatch: Dispatch ) => {
-        api.getTasks(listID).then(res => {
-            dispatch(setTasksAC(listID, res.data.items))
-        })
-    }
+export const getTasksTC = ( listID: string ): AppThunk => ( dispatch ) => {
+    api.getTasks(listID).then(res => {
+        dispatch(setTasksAC(listID, res.data.items))
+    })
 }
-export const addTaskTC = ( listID: string, title: string ) => {
-    return ( dispatch: Dispatch ) => {
-        api.addTask(listID, title).then(res => {
-            dispatch(addTaskAC(listID, res.data.data.item))
-        })
-    }
+export const addTaskTC = ( listID: string, title: string ): AppThunk => ( dispatch ) => {
+    api.addTask(listID, title).then(res => {
+        dispatch(addTaskAC(listID, res.data.data.item))
+    })
 }
-export const deleteTaskTC = ( listID: string, taskID: string ) => {
-    return ( dispatch: Dispatch ) => {
-        api.deleteTask(listID, taskID).then(res => {
-            dispatch(removeTaskAC(listID, taskID))
-        })
-    }
+export const deleteTaskTC = ( listID: string, taskID: string ): AppThunk => ( dispatch ) => {
+    api.deleteTask(listID, taskID).then(res => {
+        dispatch(removeTaskAC(listID, taskID))
+    })
 }
-export const updateTaskTC = ( listID: string, taskID: string, model: UpdateTaskModelType ) => {
-    return ( dispatch: Dispatch ) => {
-        api.updateTask(listID, taskID, model).then(res => {
-            dispatch(changeTaskAC(listID, taskID, res.data.data.item))
-        })
-    }
+export const updateTaskTC = ( listID: string, taskID: string, model: UpdateTaskModelType ): AppThunk => ( dispatch ) => {
+    api.updateTask(listID, taskID, model).then(res => {
+        dispatch(changeTaskAC(listID, taskID, res.data.data.item))
+    })
 }
+

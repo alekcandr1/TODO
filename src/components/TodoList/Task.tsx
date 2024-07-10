@@ -5,13 +5,7 @@ import { EditableSpan } from '../EditableSpan';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ChangeEvent, useCallback } from 'react';
-import {
-    changeTaskStatusAC,
-    changeTaskTitleAC,
-    deleteTaskTC,
-    removeTaskAC,
-    updateTaskTC
-} from '../../model/task-reducer';
+import { deleteTaskTC, updateTaskTC } from '../../model/task-reducer';
 import { useDispatch } from 'react-redux';
 import { TaskType } from '../../api/api';
 
@@ -28,9 +22,6 @@ export const Task = React.memo(( {task, listID}: TaskProps ) => {
         dispatch(deleteTaskTC(listID, task.id))
     }, [dispatch, listID, task.id])
 
-    // const changeTaskStatusHandler = useCallback(( e: ChangeEvent<HTMLInputElement> ) => {
-    //     dispatch(changeTaskStatusAC(listID, task.id, e.currentTarget.checked))
-    // }, [dispatch, listID, task.id])
     const changeTaskStatusHandler = useCallback(( e: ChangeEvent<HTMLInputElement> ) => {
         let currentStatus
         e.currentTarget.checked
@@ -44,22 +35,25 @@ export const Task = React.memo(( {task, listID}: TaskProps ) => {
             startDate: task.startDate,
             deadline: task.deadline
         }))
-    }, [dispatch, listID, task.id])
+    }, [dispatch, listID, task.deadline, task.description, task.id, task.priority, task.startDate, task.title])
 
-    // const changeTaskTitleHandler = useCallback(( newTitle: string ) => {
-    //     dispatch(updateTaskTC(listID, task.id, newTitle))
-    // }, [dispatch, task.id, listID])
-
+    const changeTaskTitleHandler = useCallback(( newTitle: string ) => {
+        dispatch(updateTaskTC(listID, task.id, {
+            status: task.status,
+            title: newTitle,
+            description: task.description,
+            priority: task.priority,
+            startDate: task.startDate,
+            deadline: task.deadline
+        }))
+    }, [dispatch, listID, task.id, task.status, task.description, task.priority, task.startDate, task.deadline])
 
     return (
         <>
             <Checkbox checked={ task.status === 2 }
                       onChange={ changeTaskStatusHandler } />
             <EditableSpan title={ task.title }
-                          onChange={ ()=>{}
-                // changeTaskTitleHandler
-            }
-            />
+                          onChange={ changeTaskTitleHandler } />
             <IconButton onClick={ removeTaskHandler }>
                 <DeleteIcon />
             </IconButton>
