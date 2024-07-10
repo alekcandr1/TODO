@@ -33,7 +33,7 @@ export const api = {
         return instance.delete<ResponseType>(`/todo-lists/${ listID }/tasks/${ taskID }`)
     },
     updateTask: ( listID: string, taskID: string, model: UpdateTaskModelType ) => {
-        return instance.put<ResponseType<{ item: TaskType }>, AxiosResponse<ResponseType<{ item: TaskType }>>, UpdateTaskModelType>(`/todo-lists/${ listID }/tasks/${ taskID }`, model)
+        return instance.put<ResponseType<{ item: TaskType }>, AxiosResponse<ResponseType<{ item: TaskType }>>>(`/todo-lists/${ listID }/tasks/${ taskID }`, model)
     },
 
 }

@@ -2,36 +2,54 @@ import { addTodolistAC } from './todolists-reducer';
 import { v1 } from 'uuid';
 import { addTaskAC, removeTaskAC, tasksReducer } from './task-reducer';
 
-import { TasksType } from '../api/api';
+import { TaskPriorities, TaskStatuses, TasksType } from '../api/api';
 
 let startState: TasksType
 let todolistID1: string
 let todolistID2: string
 
-// beforeEach(()=>{
-//     todolistID1 = v1()
-//     todolistID2 = v1()
-//     startState = {
-//         [todolistID1]: [
-//             {id: '1', title: 'HTML&CSS', isDone: true},
-//             {id: '2', title: 'JS', isDone: true},
-//             {id: '3', title: 'React', isDone: false},
-//         ],
-//         [todolistID2]: [
-//             {id: '1', title: 'Terminator', isDone: true},
-//             {id: '2', title: 'The Godfather', isDone: false},
-//             {id: '3', title: 'Star Wars', isDone: false},
-//         ],
-//     }
-// })
-//
-// test('remove correct task', () => {
-//
-//     const endState = tasksReducer(startState, removeTaskAC(todolistID2, '2'))
-//
-//     expect(endState[todolistID2][1].id).toBe('3')
-//
-// })
+beforeEach(() => {
+    todolistID1 = v1()
+    todolistID2 = v1()
+    startState = {
+        [todolistID1]: [
+            {
+                description: '', title: 'HTML&CSS', status: 0, priority: 0, startDate: '',
+                deadline: '', id: '1', listID: '001', order: 0, addedDate: ''
+            },
+            {
+                description: '', title: 'JS', status: 0, priority: 0, startDate: '',
+                deadline: '', id: '2', listID: '002', order: 0, addedDate: ''
+            },
+            {
+                description: '', title: 'REACT', status: 0, priority: 0, startDate: '',
+                deadline: '', id: '3', listID: '003', order: 0, addedDate: ''
+            },
+        ],
+        [todolistID2]: [
+            {
+                description: '', title: 'Terminator', status: 2, priority: 0, startDate: '',
+                deadline: '', id: '1', listID: '001', order: 0, addedDate: ''
+            },
+            {
+                description: '', title: 'The Godfather', status: 0, priority: 0, startDate: '',
+                deadline: '', id: '2', listID: '002', order: 0, addedDate: ''
+            },
+            {
+                description: '', title: 'Star Wars', status: 0, priority: 0, startDate: '',
+                deadline: '', id: '3', listID: '003', order: 0, addedDate: ''
+            },
+        ],
+    }
+})
+
+test('remove correct task', () => {
+
+    const endState = tasksReducer(startState, removeTaskAC(todolistID2, '2'))
+
+    expect(endState[todolistID2][1].id).toBe('3')
+
+})
 //
 // test('correct task should be added to correct array', () => {
 //
