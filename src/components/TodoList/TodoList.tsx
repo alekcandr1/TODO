@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { FilterType } from '../../AppWithRedux';
 import { Button, Checkbox, List, ListItem } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import { AddItemForm } from '../AddItemForm';
@@ -7,6 +6,7 @@ import { EditableSpan } from '../EditableSpan';
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { TaskType } from '../../api/api';
+import { FilterType } from '../../model/todolists-reducer';
 
 export type TodoListPropsType = {
     id: string

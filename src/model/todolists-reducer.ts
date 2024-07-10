@@ -1,4 +1,3 @@
-import { FilterType } from '../AppWithRedux'
 import { api, TodoListType } from '../api/api';
 import { AppThunk } from './store';
 
@@ -64,3 +63,5 @@ export type TodolistsActionsType =
     | ReturnType<typeof changeTodolistFilterAC>
 
 export type TodoListDomainType = TodoListType & {filter: FilterType}
+
+export type FilterType = 'ALL' | 'ACTIVE' | 'COMPLETED'

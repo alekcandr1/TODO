@@ -14,14 +14,6 @@ import { AppRootStateType, useAppDispatch } from './model/store';
 import { TodoListWithRedux } from './components/TodoList/TodoListWithRedux';
 import { AddItemForm } from './components/AddItemForm';
 
-export type FilterType = 'ALL' | 'ACTIVE' | 'COMPLETED'
-// export type TodoLists = TodoListType[]
-// export type TodoListType = {
-//     listID: string
-//     title: string
-//     filter: FilterType
-// }
-
 function AppWithRedux() {
     let dispatch = useAppDispatch()
 

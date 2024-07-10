@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { FilterType } from '../../AppWithRedux';
 import { List, ListItem } from '@mui/material';
 import { memo, useCallback, useEffect, useMemo } from 'react';
 import { AddItemForm } from '../AddItemForm';
@@ -8,11 +7,11 @@ import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useSelector } from 'react-redux';
 import { AppRootStateType, useAppDispatch } from '../../model/store';
-import { addTaskAC, addTaskTC, getTasksTC } from '../../model/task-reducer';
+import { addTaskTC, getTasksTC } from '../../model/task-reducer';
 import {
     changeTodolistFilterAC,
     changeTodoTitleTC,
-    deleteTodoTC,
+    deleteTodoTC, FilterType,
     TodoListDomainType
 } from '../../model/todolists-reducer';
 import ButtonContainer from '../ButtonContainer';

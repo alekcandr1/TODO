@@ -9,67 +9,33 @@ export const tasksReducer = ( state: TasksType = initialState, action: TasksActi
         case 'REMOVE-TASK':
             return {
                 ...state,
-                [action.payload.listID]: state[action.payload.listID].filter(
-                    task => task.id !== action.payload.taskID
-                )
+                [action.payload.listID]: state[action.payload.listID].filter(t => t.id !== action.payload.taskID)
             }
         case 'ADD-TASK':
             return {
                 ...state,
-                [action.payload.listID]: [
-                    action.payload.task,
-                    ...state[action.payload.listID]
-                ]
-            }
-        case 'CHANGE-TASK-STATUS':
-            return {
-                ...state,
-                [action.payload.listID]: state[action.payload.listID].map(task => task.id === action.payload.taskID ? {
-                    ...task,
-                    isDone: action.payload.status
-                } : task)
-            }
-        case 'CHANGE-TASK-TITLE':
-            return {
-                ...state,
-                [action.payload.listID]:
-                    state[action.payload.listID].map(task => task.id === action.payload.taskID ? {
-                        ...task,
-                        title: action.payload.title
-                    } : task)
+                [action.payload.listID]: [action.payload.task, ...state[action.payload.listID]]
             }
         case 'CHANGE-TASK':
             return {
                 ...state,
                 [action.payload.listID]:
-                    state[action.payload.listID].map(task => task.id === action.payload.taskID ? {
-                        ...task,
-                        title: action.payload.task.title,
-                        status: action.payload.task.status
-                    } : task)
+                    state[action.payload.listID].map(t => t.id === action.payload.taskID ? {...action.payload.task} : t)
             }
         case 'ADD-TODOLIST':
-            return {
-                ...state,
-                [action.payload.list.id]: []
-            }
+            return {...state, [action.payload.list.id]: []}
         case 'REMOVE-TODOLIST':
-            let copyState = {...state}
+            const copyState = {...state}
             delete copyState[action.payload.id]
             return copyState
-        case 'SET-TODOS': {
+        case 'SET-TODOS':
             const stateCopy = {...state}
             action.todos.forEach(tl => {
                 stateCopy[tl.id] = []
             })
             return stateCopy
-        }
-        case 'SET-TASKS': {
-            return {
-                ...state,
-                [action.listID]: action.tasks
-            }
-        }
+        case 'SET-TASKS':
+            return {...state, [action.listID]: action.tasks}
         default:
             return state
     }
@@ -82,10 +48,6 @@ export const removeTaskAC = ( listID: string, taskID: string ) =>
     ({type: 'REMOVE-TASK', payload: {listID: listID, taskID: taskID}} as const)
 export const addTaskAC = ( listID: string, task: TaskType ) =>
     ({type: 'ADD-TASK', payload: {listID: listID, task}} as const)
-export const changeTaskStatusAC = ( listID: string, taskID: string, status: boolean ) =>
-    ({type: 'CHANGE-TASK-STATUS', payload: {listID: listID, taskID: taskID, status: status}} as const)
-export const changeTaskTitleAC = ( listID: string, taskID: string, title: string ) =>
-    ({type: 'CHANGE-TASK-TITLE', payload: {listID: listID, taskID: taskID, title: title}} as const)
 export const changeTaskAC = ( listID: string, taskID: string, task: TaskType ) =>
     ({type: 'CHANGE-TASK', payload: {listID, taskID, task}} as const)
 
@@ -118,8 +80,6 @@ export type TasksActionsType =
     | SetTodosType
     | ReturnType<typeof removeTaskAC>
     | ReturnType<typeof addTaskAC>
-    | ReturnType<typeof changeTaskStatusAC>
-    | ReturnType<typeof changeTaskTitleAC>
     | ReturnType<typeof setTasksAC>
     | ReturnType<typeof changeTaskAC>
 
