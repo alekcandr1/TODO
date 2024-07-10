@@ -1,31 +1,8 @@
-import {
-    AddTodolistActionType,
-    RemoveTodolistActionType, SetTodosType
-} from './todolists-reducer';
-import { Dispatch } from 'redux';
+import { AddTodolistActionType, RemoveTodolistActionType, SetTodosType } from './todolists-reducer';
 import { api, TasksType, TaskType, UpdateTaskModelType } from '../api/api';
 import { AppThunk } from './store';
 
-
 const initialState: TasksType = {}
-
-export type RemoveTaskType = ReturnType<typeof removeTaskAC>
-export type AddTaskType = ReturnType<typeof addTaskAC>
-export type ChangeTaskStatusType = ReturnType<typeof changeTaskStatusAC>
-export type ChangeTaskTitleType = ReturnType<typeof changeTaskTitleAC>
-export type SetTasksType = ReturnType<typeof setTasksAC>
-export type changeTaskType = ReturnType<typeof changeTaskAC>
-
-export type TasksActionsType =
-    | RemoveTaskType
-    | AddTaskType
-    | ChangeTaskStatusType
-    | ChangeTaskTitleType
-    | AddTodolistActionType
-    | RemoveTodolistActionType
-    | SetTodosType
-    | SetTasksType
-    | changeTaskType
 
 export const tasksReducer = ( state: TasksType = initialState, action: TasksActionsType ): TasksType => {
     switch (action.type) {
@@ -98,46 +75,21 @@ export const tasksReducer = ( state: TasksType = initialState, action: TasksActi
     }
 }
 
-export const setTasksAC = ( listID: string, tasks: TaskType[] ) => {
-    return {type: 'SET-TASKS', listID, tasks} as const
-}
-export const removeTaskAC = ( listID: string, taskID: string ) => {
-    return {type: 'REMOVE-TASK', payload: {listID: listID, taskID: taskID}} as const
-}
-export const addTaskAC = ( listID: string, task: TaskType ) => {
-    return {type: 'ADD-TASK', payload: {listID: listID, task}} as const
-}
-export const changeTaskStatusAC = ( listID: string, taskID: string, status: boolean ) => {
-    return {
-        type: 'CHANGE-TASK-STATUS',
-        payload: {
-            listID: listID,
-            taskID: taskID,
-            status: status
-        }
-    } as const
-}
-export const changeTaskTitleAC = ( listID: string, taskID: string, title: string ) => {
-    return {
-        type: 'CHANGE-TASK-TITLE',
-        payload: {
-            listID: listID,
-            taskID: taskID,
-            title: title
-        }
-    } as const
-}
-export const changeTaskAC = ( listID: string, taskID: string, task: TaskType ) => {
-    return {
-        type: 'CHANGE-TASK',
-        payload: {
-            listID,
-            taskID,
-            task
-        }
-    } as const
-}
+// actions
+export const setTasksAC = ( listID: string, tasks: TaskType[] ) =>
+    ({type: 'SET-TASKS', listID, tasks} as const)
+export const removeTaskAC = ( listID: string, taskID: string ) =>
+    ({type: 'REMOVE-TASK', payload: {listID: listID, taskID: taskID}} as const)
+export const addTaskAC = ( listID: string, task: TaskType ) =>
+    ({type: 'ADD-TASK', payload: {listID: listID, task}} as const)
+export const changeTaskStatusAC = ( listID: string, taskID: string, status: boolean ) =>
+    ({type: 'CHANGE-TASK-STATUS', payload: {listID: listID, taskID: taskID, status: status}} as const)
+export const changeTaskTitleAC = ( listID: string, taskID: string, title: string ) =>
+    ({type: 'CHANGE-TASK-TITLE', payload: {listID: listID, taskID: taskID, title: title}} as const)
+export const changeTaskAC = ( listID: string, taskID: string, task: TaskType ) =>
+    ({type: 'CHANGE-TASK', payload: {listID, taskID, task}} as const)
 
+// thunks
 export const getTasksTC = ( listID: string ): AppThunk => ( dispatch ) => {
     api.getTasks(listID).then(res => {
         dispatch(setTasksAC(listID, res.data.items))
@@ -158,4 +110,16 @@ export const updateTaskTC = ( listID: string, taskID: string, model: UpdateTaskM
         dispatch(changeTaskAC(listID, taskID, res.data.data.item))
     })
 }
+
+// types
+export type TasksActionsType =
+    | AddTodolistActionType
+    | RemoveTodolistActionType
+    | SetTodosType
+    | ReturnType<typeof removeTaskAC>
+    | ReturnType<typeof addTaskAC>
+    | ReturnType<typeof changeTaskStatusAC>
+    | ReturnType<typeof changeTaskTitleAC>
+    | ReturnType<typeof setTasksAC>
+    | ReturnType<typeof changeTaskAC>
 
