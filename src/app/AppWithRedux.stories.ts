@@ -1,18 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import AppWithRedux from '../AppWithRedux';
+import App from './App';
 import { ReduxStoreProviderDecorator } from '../ReduxStoreProviderDecorator';
 
 //META
 const meta = {
     title: 'TODOLISTS/AppWithRedux',
-    component: AppWithRedux,
+    component: App,
     parameters: {
         layout: 'centered',
     },
     tags: ['autodocs'],
     decorators: [ReduxStoreProviderDecorator],
     args: {}
-} satisfies Meta<typeof AppWithRedux>;
+} satisfies Meta<typeof App>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

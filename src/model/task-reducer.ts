@@ -52,22 +52,22 @@ export const changeTaskAC = ( listID: string, taskID: string, task: TaskType ) =
     ({type: 'CHANGE-TASK', payload: {listID, taskID, task}} as const)
 
 // thunks
-export const getTasksTC = ( listID: string ): AppThunk => ( dispatch ) => {
+export const getTasksTC = ( listID: string ): AppThunk => dispatch => {
     api.getTasks(listID).then(res => {
         dispatch(setTasksAC(listID, res.data.items))
     })
 }
-export const addTaskTC = ( listID: string, title: string ): AppThunk => ( dispatch ) => {
+export const addTaskTC = ( listID: string, title: string ): AppThunk => dispatch => {
     api.addTask(listID, title).then(res => {
         dispatch(addTaskAC(listID, res.data.data.item))
     })
 }
-export const deleteTaskTC = ( listID: string, taskID: string ): AppThunk => ( dispatch ) => {
+export const deleteTaskTC = ( listID: string, taskID: string ): AppThunk => dispatch => {
     api.deleteTask(listID, taskID).then(res => {
         dispatch(removeTaskAC(listID, taskID))
     })
 }
-export const updateTaskTC = ( listID: string, taskID: string, model: UpdateTaskModelType ): AppThunk => ( dispatch ) => {
+export const updateTaskTC = ( listID: string, taskID: string, model: UpdateTaskModelType ): AppThunk => dispatch => {
     api.updateTask(listID, taskID, model).then(res => {
         dispatch(changeTaskAC(listID, taskID, res.data.data.item))
     })
