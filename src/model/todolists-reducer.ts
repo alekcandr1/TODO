@@ -7,7 +7,7 @@ export const todolistsReducer = ( state = initialState, action: TodolistsActions
     switch (action.type) {
         case 'ADD-TODOLIST':
             return [...state, {...action.payload.list, filter: 'ALL'}]
-        case 'REMOVE-TODOLIST':
+        case 'DELETE-TODOLIST':
             return state.filter(tl => tl.id !== action.payload.id)
         case 'CHANGE-TODOLIST-TITLE':
             return state.map(tl => tl.id === action.payload.id ? {...tl, title: action.payload.title} : tl)
@@ -21,8 +21,8 @@ export const todolistsReducer = ( state = initialState, action: TodolistsActions
 }
 
 //actions
-export const removeTodolistAC = ( id: string ) =>
-    ({type: 'REMOVE-TODOLIST', payload: {id}} as const)
+export const deleteTodolistAC = ( id: string ) =>
+    ({type: 'DELETE-TODOLIST', payload: {id}} as const)
 export const addTodolistAC = ( list: TodoListType ) =>
     ({type: 'ADD-TODOLIST', payload: {list}} as const)
 export const changeTodolistTitleAC = ( id: string, title: string ) =>
@@ -39,7 +39,7 @@ export const getTodosTC = (): AppThunk => async dispatch => {
 }
 export const deleteTodoTC = ( listID: string ): AppThunk => async dispatch => {
     await api.deleteTodos(listID)
-    dispatch(removeTodolistAC(listID))
+    dispatch(deleteTodolistAC(listID))
 }
 export const addTodoTC = ( title: string ): AppThunk => async dispatch => {
     const res = await api.addTodo(title)
@@ -52,7 +52,7 @@ export const changeTodoTitleTC = ( listID: string, newTitle: string ): AppThunk 
 
 // types
 export type AddTodolistActionType = ReturnType<typeof addTodolistAC>
-export type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>
+export type RemoveTodolistActionType = ReturnType<typeof deleteTodolistAC>
 export type SetTodosType = ReturnType<typeof setTodosAC>
 
 export type TodolistsActionsType =
