@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import React, { memo } from 'react';
-import { FilterType } from '../model/todolists-reducer';
+import { FilterType } from '../../model/todolists-reducer';
 
 type ButtonContainerPropsType = {
     title: FilterType

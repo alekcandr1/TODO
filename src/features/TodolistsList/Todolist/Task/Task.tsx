@@ -1,13 +1,13 @@
 // @flow
 import * as React from 'react';
 import { Checkbox } from '@mui/material';
-import { EditableSpan } from '../EditableSpan';
+import { EditableSpan } from '../../../../components/EditableSpan/EditableSpan';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ChangeEvent, useCallback } from 'react';
-import { deleteTaskTC, updateTaskTC } from '../../model/task-reducer';
+import { deleteTaskTC, updateTaskTC } from '../../../../model/task-reducer';
 import { useDispatch } from 'react-redux';
-import { TaskType } from '../../api/api';
+import { TaskType } from '../../../../api/api';
 
 type TaskProps = {
     task: TaskType

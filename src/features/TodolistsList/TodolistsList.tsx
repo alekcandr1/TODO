@@ -2,7 +2,7 @@
 import * as React from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import { Paper } from '@mui/material';
-import { TodoList } from '../../components/TodoList/TodoList';
+import { TodoList } from './Todolist/TodoList';
 import { AppRootStateType, useAppDispatch } from '../../model/store';
 import { useCallback, useEffect } from 'react';
 import { addTodoTC, getTodosTC, TodoListDomainType } from '../../model/todolists-reducer';
