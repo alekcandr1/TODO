@@ -24,7 +24,7 @@ export type TodoListPropsType = {
 
 export const TodoList = memo(( {list}: TodoListPropsType ) => {
     const dispatch = useAppDispatch()
-    const {id, title, filter} = list
+    const {id, title, filter, entityStatus} = list
 
     useEffect(() => {
         dispatch(getTasksTC(id))
@@ -62,14 +62,15 @@ export const TodoList = memo(( {list}: TodoListPropsType ) => {
         <div key={ id } className={ 'todolist' }>
             <div className={ 'todolist-title-container' }>
                 <h3>
-                    <EditableSpan title={ title } onChange={ changeTodoListTitleHandler } />
+                    <EditableSpan title={ title } onChange={ changeTodoListTitleHandler }
+                                  disabled={ entityStatus === 'loading' } />
                 </h3>
-                <IconButton onClick={ removeTodolistHandler }>
+                <IconButton onClick={ removeTodolistHandler } disabled={ entityStatus === 'loading' }>
                     <DeleteIcon />
                 </IconButton>
             </div>
 
-            <AddItemForm addItem={ addTaskHandler } />
+            <AddItemForm addItem={ addTaskHandler } disabled={ entityStatus === 'loading' } />
             <List>
                 {
                     tasks.map(task => {
@@ -84,6 +85,7 @@ export const TodoList = memo(( {list}: TodoListPropsType ) => {
                                         key={ task.id }
                                         task={ task }
                                         listID={ id }
+                                        disabled={ entityStatus === 'loading' }
                                     />
                                 </ListItem>
                             )

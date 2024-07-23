@@ -4,9 +4,10 @@ import { IconButton, TextField } from '@mui/material';
 
 export type AddItemFormPropsType = {
     addItem: ( title: string ) => void
+    disabled?: boolean
 };
 
-export const AddItemForm = memo(( {addItem}: AddItemFormPropsType ) => {
+export const AddItemForm = memo(( {addItem, disabled}: AddItemFormPropsType ) => {
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<string | null>(null)
 
@@ -40,9 +41,10 @@ export const AddItemForm = memo(( {addItem}: AddItemFormPropsType ) => {
             onKeyUp={ onKeyUpInputHandler }
             error={ !!error }
             helperText={ error }
+            disabled={ disabled }
         />
 
-        <IconButton color={ 'primary' } onClick={ addItemHandler }>
+        <IconButton color={ 'primary' } onClick={ addItemHandler } disabled={ disabled }>
             <AddCircleOutlineIcon />
         </IconButton>
     </>

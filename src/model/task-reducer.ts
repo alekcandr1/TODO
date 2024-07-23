@@ -1,6 +1,12 @@
-import { AddTodolistActionType, RemoveTodolistActionType, SetTodosType } from './todolists-reducer';
+import {
+    AddTodolistActionType,
+    changeTodolistStatusAC,
+    RemoveTodolistActionType,
+    SetTodosType
+} from './todolists-reducer';
 import { api, TasksType, TaskType, UpdateTaskModelType } from '../api/api';
 import { AppThunk } from './store';
+import { setErrorAC, SetErrorType, setStatusAC, SetStatusType } from './app-reducer';
 
 const initialState: TasksType = {}
 
@@ -53,14 +59,34 @@ export const changeTaskAC = ( listID: string, taskID: string, task: TaskType ) =
 
 // thunks
 export const getTasksTC = ( listID: string ): AppThunk => dispatch => {
-    api.getTasks(listID).then(res => {
-        dispatch(setTasksAC(listID, res.data.items))
-    })
+    dispatch(setStatusAC('loading'))
+    api.getTasks(listID)
+        .then(res => {
+            dispatch(setTasksAC(listID, res.data.items))
+            dispatch(setStatusAC('succeeded'))
+        })
+        .catch(( err ) => {
+            dispatch(setStatusAC('failed'))
+        })
 }
 export const addTaskTC = ( listID: string, title: string ): AppThunk => dispatch => {
-    api.addTask(listID, title).then(res => {
-        dispatch(addTaskAC(listID, res.data.data.item))
-    })
+    dispatch(setStatusAC('loading'))
+    dispatch(changeTodolistStatusAC(listID, 'loading'))
+    api.addTask(listID, title)
+        .then(res => {
+            if (res.data.resultCode === 0) {
+                dispatch(addTaskAC(listID, res.data.data.item))
+                dispatch(setStatusAC('succeeded'))
+            } else {
+                if (res.data.messages.length) {
+                    dispatch(setErrorAC(res.data.messages[0]))
+                } else {
+                    dispatch(setErrorAC('Some error occurred'))
+                }
+                dispatch(setStatusAC('failed'))
+            }
+            dispatch(changeTodolistStatusAC(listID, 'idle'))
+        })
 }
 export const deleteTaskTC = ( listID: string, taskID: string ): AppThunk => dispatch => {
     api.deleteTask(listID, taskID).then(res => {
@@ -82,4 +108,5 @@ export type TasksActionsType =
     | ReturnType<typeof addTaskAC>
     | ReturnType<typeof setTasksAC>
     | ReturnType<typeof changeTaskAC>
-
+    | SetStatusType
+    | SetErrorType

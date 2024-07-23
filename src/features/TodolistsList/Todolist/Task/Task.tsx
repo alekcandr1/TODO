@@ -12,8 +12,9 @@ import { TaskType } from '../../../../api/api';
 type TaskProps = {
     task: TaskType
     listID: string
+    disabled: boolean
 };
-export const Task = React.memo(( {task, listID}: TaskProps ) => {
+export const Task = React.memo(( {task, listID, disabled}: TaskProps ) => {
 
     console.log('Task')
     let dispatch = useDispatch()
@@ -53,8 +54,8 @@ export const Task = React.memo(( {task, listID}: TaskProps ) => {
             <Checkbox checked={ task.status === 2 }
                       onChange={ changeTaskStatusHandler } />
             <EditableSpan title={ task.title }
-                          onChange={ changeTaskTitleHandler } />
-            <IconButton onClick={ removeTaskHandler }>
+                          onChange={ changeTaskTitleHandler } disabled={disabled} />
+            <IconButton onClick={ removeTaskHandler } disabled={disabled}>
                 <DeleteIcon />
             </IconButton>
         </>
