@@ -7,6 +7,11 @@ const instance = axios.create({
         'API-KEY': '78c0a0ee-da0b-4710-ac11-ab8b526808e2'
     }
 })
+export enum STATUS_CODE {
+    SUCCESS = 0,
+    ERROR = 1,
+    RECAPTCHA_ERROR = 10,
+}
 
 // api
 export const api = {
@@ -39,7 +44,7 @@ export const api = {
 }
 
 //types
-type ResponseType<T = {}> = {
+export type ResponseType<T = {}> = {
     data: T
     resultCode: number
     messages: string[],
@@ -93,4 +98,14 @@ type GetTasksResponse = {
     error: string | null
     totalCount: number
     items: TaskType[]
+}
+export type ErrorType = {
+    statusCode: number,
+    messages: [
+        {
+            message: string
+            field: string
+        }
+    ]
+    error: string
 }

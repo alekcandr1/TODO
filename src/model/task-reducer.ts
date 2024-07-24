@@ -4,9 +4,10 @@ import {
     RemoveTodolistActionType,
     SetTodosType
 } from './todolists-reducer';
-import { api, TasksType, TaskType, UpdateTaskModelType } from '../api/api';
+import { api, STATUS_CODE, TasksType, TaskType, UpdateTaskModelType } from '../api/api';
 import { AppThunk } from './store';
-import { setErrorAC, SetErrorType, setStatusAC, SetStatusType } from './app-reducer';
+import { setAppErrorAC, SetAppErrorType, setAppStatusAC, SetAppStatusType } from './app-reducer';
+import { handleServerAppError, handleServerNetworkError } from '../utils/app-utils';
 
 const initialState: TasksType = {}
 
@@ -59,44 +60,72 @@ export const changeTaskAC = ( listID: string, taskID: string, task: TaskType ) =
 
 // thunks
 export const getTasksTC = ( listID: string ): AppThunk => dispatch => {
-    dispatch(setStatusAC('loading'))
+    dispatch(setAppStatusAC('loading'))
     api.getTasks(listID)
         .then(res => {
             dispatch(setTasksAC(listID, res.data.items))
-            dispatch(setStatusAC('succeeded'))
+            dispatch(setAppStatusAC('succeeded'))
         })
         .catch(( err ) => {
-            dispatch(setStatusAC('failed'))
+            handleServerNetworkError(err, dispatch)
         })
 }
 export const addTaskTC = ( listID: string, title: string ): AppThunk => dispatch => {
-    dispatch(setStatusAC('loading'))
+    dispatch(setAppStatusAC('loading'))
     dispatch(changeTodolistStatusAC(listID, 'loading'))
     api.addTask(listID, title)
         .then(res => {
-            if (res.data.resultCode === 0) {
+            if (res.data.resultCode === STATUS_CODE.SUCCESS) {
                 dispatch(addTaskAC(listID, res.data.data.item))
-                dispatch(setStatusAC('succeeded'))
+                dispatch(setAppStatusAC('succeeded'))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(setErrorAC(res.data.messages[0]))
-                } else {
-                    dispatch(setErrorAC('Some error occurred'))
-                }
-                dispatch(setStatusAC('failed'))
+                handleServerAppError(res.data, dispatch)
             }
+        })
+        .catch(( error ) => {
+            handleServerNetworkError(error, dispatch)
+        })
+        .finally(() => {
             dispatch(changeTodolistStatusAC(listID, 'idle'))
         })
 }
 export const deleteTaskTC = ( listID: string, taskID: string ): AppThunk => dispatch => {
-    api.deleteTask(listID, taskID).then(res => {
-        dispatch(removeTaskAC(listID, taskID))
-    })
+    dispatch(setAppStatusAC('loading'))
+    dispatch(changeTodolistStatusAC(listID, 'loading'))
+    api.deleteTask(listID, taskID)
+        .then(res => {
+            if (res.data.resultCode === STATUS_CODE.SUCCESS) {
+                dispatch(removeTaskAC(listID, taskID))
+                dispatch(setAppStatusAC('succeeded'))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
+        })
+        .catch(( error ) => {
+            handleServerNetworkError(error, dispatch)
+        })
+        .finally(() => {
+            dispatch(changeTodolistStatusAC(listID, 'idle'))
+        })
 }
 export const updateTaskTC = ( listID: string, taskID: string, model: UpdateTaskModelType ): AppThunk => dispatch => {
-    api.updateTask(listID, taskID, model).then(res => {
-        dispatch(changeTaskAC(listID, taskID, res.data.data.item))
-    })
+    dispatch(setAppStatusAC('loading'))
+    dispatch(changeTodolistStatusAC(listID, 'loading'))
+    api.updateTask(listID, taskID, model)
+        .then(res => {
+            if (res.data.resultCode === STATUS_CODE.SUCCESS) {
+                dispatch(changeTaskAC(listID, taskID, res.data.data.item))
+                dispatch(setAppStatusAC('succeeded'))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
+        })
+        .catch(( error ) => {
+            handleServerNetworkError(error, dispatch)
+        })
+        .finally(() => {
+            dispatch(changeTodolistStatusAC(listID, 'idle'))
+        })
 }
 
 // types
@@ -108,5 +137,5 @@ export type TasksActionsType =
     | ReturnType<typeof addTaskAC>
     | ReturnType<typeof setTasksAC>
     | ReturnType<typeof changeTaskAC>
-    | SetStatusType
-    | SetErrorType
+    | SetAppStatusType
+    | SetAppErrorType

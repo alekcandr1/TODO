@@ -1,6 +1,8 @@
-import { api, TodoListType } from '../api/api';
+import { api, ErrorType, STATUS_CODE, TodoListType } from '../api/api';
 import { AppThunk } from './store';
-import { RequestStatusType } from './app-reducer';
+import { RequestStatusType, setAppErrorAC, setAppStatusAC } from './app-reducer';
+import { handleServerAppError, handleServerNetworkError } from '../utils/app-utils';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 const initialState: TodoListDomainType[] = []
 
@@ -43,16 +45,68 @@ export const getTodosTC = (): AppThunk => async dispatch => {
     dispatch(setTodosAC(res.data))
 }
 export const deleteTodoTC = ( listID: string ): AppThunk => async dispatch => {
-    await api.deleteTodos(listID)
-    dispatch(deleteTodolistAC(listID))
+    try {
+        dispatch(setAppStatusAC('loading'))
+        dispatch(changeTodolistStatusAC(listID, 'loading'))
+        const res = await api.deleteTodos(listID)
+
+        if (res.data.resultCode === STATUS_CODE.SUCCESS) {
+            dispatch(deleteTodolistAC(listID))
+            dispatch(setAppStatusAC('succeeded'))
+        } else {
+            handleServerAppError(res.data, dispatch)
+        }
+    } catch (e: unknown) {
+        if (axios.isAxiosError<ErrorType>(e) && e.response?.data.messages[0]?.message) {
+            handleServerNetworkError({message: e.response.data.messages[0].message}, dispatch)
+        } else {
+            handleServerNetworkError({message: (e as Error).message}, dispatch)
+        }
+    } finally {
+        dispatch(changeTodolistStatusAC(listID, 'idle'))
+    }
+
 }
 export const addTodoTC = ( title: string ): AppThunk => async dispatch => {
-    const res = await api.addTodo(title)
-    dispatch(addTodolistAC(res.data.data.item))
+    try {
+        dispatch(setAppStatusAC('loading'))
+        const res = await api.addTodo(title)
+
+        if (res.data.resultCode === STATUS_CODE.SUCCESS) {
+            dispatch(addTodolistAC(res.data.data.item))
+            dispatch(setAppStatusAC('succeeded'))
+        } else {
+            handleServerAppError(res.data, dispatch)
+        }
+    } catch (e: unknown) {
+        if (axios.isAxiosError<ErrorType>(e) && e.response?.data.messages[0]?.message) {
+            handleServerNetworkError({message: e.response.data.messages[0].message}, dispatch)
+        } else {
+            handleServerNetworkError({message: (e as Error).message}, dispatch)
+        }
+    }
 }
 export const changeTodoTitleTC = ( listID: string, newTitle: string ): AppThunk => async ( dispatch ) => {
-    await api.changeTodoTitle(listID, newTitle)
-    dispatch(changeTodolistTitleAC(listID, newTitle))
+    try {
+        dispatch(setAppStatusAC('loading'))
+        dispatch(changeTodolistStatusAC(listID, 'loading'))
+        const res = await api.changeTodoTitle(listID, newTitle)
+
+        if (res.data.resultCode === STATUS_CODE.SUCCESS) {
+            dispatch(changeTodolistTitleAC(listID, newTitle))
+            dispatch(setAppStatusAC('succeeded'))
+        } else {
+            handleServerAppError(res.data, dispatch)
+        }
+    } catch (e: unknown) {
+        if (axios.isAxiosError<ErrorType>(e) && e.response?.data.messages[0]?.message) {
+            handleServerNetworkError({message: e.response.data.messages[0].message}, dispatch)
+        } else {
+            handleServerNetworkError({message: (e as Error).message}, dispatch)
+        }
+    } finally {
+        dispatch(changeTodolistStatusAC(listID, 'idle'))
+    }
 }
 
 // types
