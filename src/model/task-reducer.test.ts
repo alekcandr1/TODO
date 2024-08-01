@@ -1,9 +1,8 @@
 import { addTodolistAC } from './todolists-reducer';
 import { v1 } from 'uuid';
-import { addTaskAC, changeTaskAC, removeTaskAC, tasksReducer } from './task-reducer';
-import { TasksType } from '../api/api';
+import { addTaskAC, changeTaskAC, removeTaskAC, TasksDomainType, tasksReducer } from './task-reducer';
 
-let startState: TasksType
+let startState: TasksDomainType
 let todolistID1: string
 let todolistID2: string
 
@@ -14,29 +13,29 @@ beforeEach(() => {
         [todolistID1]: [
             {
                 description: '', title: 'HTML&CSS', status: 0, priority: 0, startDate: '',
-                deadline: '', id: '1', listID: '001', order: 0, addedDate: ''
+                deadline: '', id: '1', listID: '001', order: 0, addedDate: '', entityStatus: 'idle'
             },
             {
                 description: '', title: 'JS', status: 0, priority: 0, startDate: '',
-                deadline: '', id: '2', listID: '002', order: 0, addedDate: ''
+                deadline: '', id: '2', listID: '002', order: 0, addedDate: '', entityStatus: 'idle'
             },
             {
                 description: '', title: 'REACT', status: 0, priority: 0, startDate: '',
-                deadline: '', id: '3', listID: '003', order: 0, addedDate: ''
+                deadline: '', id: '3', listID: '003', order: 0, addedDate: '', entityStatus: 'idle'
             },
         ],
         [todolistID2]: [
             {
                 description: '', title: 'Terminator', status: 2, priority: 0, startDate: '',
-                deadline: '', id: '1', listID: '001', order: 0, addedDate: ''
+                deadline: '', id: '1', listID: '001', order: 0, addedDate: '', entityStatus: 'idle'
             },
             {
                 description: '', title: 'The Godfather', status: 0, priority: 0, startDate: '',
-                deadline: '', id: '2', listID: '002', order: 0, addedDate: ''
+                deadline: '', id: '2', listID: '002', order: 0, addedDate: '', entityStatus: 'idle'
             },
             {
                 description: '', title: 'Star Wars', status: 0, priority: 0, startDate: '',
-                deadline: '', id: '3', listID: '003', order: 0, addedDate: ''
+                deadline: '', id: '3', listID: '003', order: 0, addedDate: '', entityStatus: 'idle'
             },
         ],
     }

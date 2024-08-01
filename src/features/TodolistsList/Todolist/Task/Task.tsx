@@ -5,16 +5,14 @@ import { EditableSpan } from '../../../../components/EditableSpan/EditableSpan';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ChangeEvent, useCallback } from 'react';
-import { deleteTaskTC, updateTaskTC } from '../../../../model/task-reducer';
+import { deleteTaskTC, TaskDomainType, updateTaskTC } from '../../../../model/task-reducer';
 import { useDispatch } from 'react-redux';
-import { TaskType } from '../../../../api/api';
 
 type TaskProps = {
-    task: TaskType
+    task: TaskDomainType
     listID: string
-    disabled: boolean
 };
-export const Task = React.memo(( {task, listID, disabled}: TaskProps ) => {
+export const Task = React.memo(( {task, listID}: TaskProps ) => {
 
     console.log('Task')
     let dispatch = useDispatch()
@@ -54,8 +52,12 @@ export const Task = React.memo(( {task, listID, disabled}: TaskProps ) => {
             <Checkbox checked={ task.status === 2 }
                       onChange={ changeTaskStatusHandler } />
             <EditableSpan title={ task.title }
-                          onChange={ changeTaskTitleHandler } disabled={disabled} />
-            <IconButton onClick={ removeTaskHandler } disabled={disabled}>
+                          onChange={ changeTaskTitleHandler }
+                          disabled={ task.entityStatus === 'loading' }
+            />
+            <IconButton onClick={ removeTaskHandler }
+                        disabled={ task.entityStatus === 'loading' }
+            >
                 <DeleteIcon />
             </IconButton>
         </>

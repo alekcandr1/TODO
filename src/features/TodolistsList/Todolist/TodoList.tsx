@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useSelector } from 'react-redux';
 import { AppRootStateType, useAppDispatch } from '../../../model/store';
-import { addTaskTC, getTasksTC } from '../../../model/task-reducer';
+import { addTaskTC, getTasksTC, TaskDomainType, TasksDomainType } from '../../../model/task-reducer';
 import {
     changeTodolistFilterAC,
     changeTodoTitleTC,
@@ -30,7 +30,7 @@ export const TodoList = memo(( {list}: TodoListPropsType ) => {
         dispatch(getTasksTC(id))
     }, [dispatch, id])
 
-    let tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
+    let tasks = useSelector<AppRootStateType, TaskDomainType[]>(state => state.tasks[id])
 
     tasks = useMemo(() => {
         if (list.filter === 'ACTIVE') {
@@ -85,7 +85,6 @@ export const TodoList = memo(( {list}: TodoListPropsType ) => {
                                         key={ task.id }
                                         task={ task }
                                         listID={ id }
-                                        disabled={ entityStatus === 'loading' }
                                     />
                                 </ListItem>
                             )

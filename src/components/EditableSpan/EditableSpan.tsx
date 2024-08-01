@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { ChangeEvent, FocusEventHandler, useState } from 'react';
 import { TextField } from '@mui/material';
-import { RequestStatusType } from '../../model/app-reducer';
 
 type EditableSpanPropsType = {
     title: string
@@ -12,7 +11,9 @@ export const EditableSpan = React.memo(( {title, onChange, disabled}: EditableSp
     const [value, setValue] = useState<string>(title)
     const [editMode, setEditMode] = useState(false)
     const activateEditMode = () => {
-        setEditMode(true)
+        if (!disabled) {
+            setEditMode(true)
+        }
     }
     const deactivateEditMode: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = ( e ) => {
         onChange(e.currentTarget.value)

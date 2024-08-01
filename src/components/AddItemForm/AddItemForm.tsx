@@ -48,5 +48,4 @@ export const AddItemForm = memo(( {addItem, disabled}: AddItemFormPropsType ) =>
             <AddCircleOutlineIcon />
         </IconButton>
     </>
-
 })

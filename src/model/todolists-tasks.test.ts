@@ -1,10 +1,10 @@
 import { addTodolistAC, deleteTodolistAC, TodoListDomainType, todolistsReducer } from './todolists-reducer';
-import { tasksReducer } from './task-reducer';
+import { TasksDomainType, tasksReducer } from './task-reducer';
 import { TasksType } from '../api/api';
 import { v1 } from 'uuid';
 
 test('ids should be equals', () => {
-    const startTasksState: TasksType = {}
+    const startTasksState: TasksDomainType = {}
     const startTodolistsState: Array<TodoListDomainType> = []
 
     const action = addTodolistAC({id: v1(), title: 'What to learn', addedDate: 'null', order: 1})
@@ -21,33 +21,33 @@ test('ids should be equals', () => {
 })
 
 test('property with todolistId should be deleted', () => {
-    const startState: TasksType = {
+    const startState: TasksDomainType = {
         'todolistId1': [
             {
                 description: '', title: 'HTML&CSS', status: 0, priority: 0, startDate: '',
-                deadline: '', id: '1', listID: '001', order: 0, addedDate: ''
+                deadline: '', id: '1', listID: '001', order: 0, addedDate: '', entityStatus: 'idle'
             },
             {
                 description: '', title: 'JS', status: 0, priority: 0, startDate: '',
-                deadline: '', id: '2', listID: '002', order: 0, addedDate: ''
+                deadline: '', id: '2', listID: '002', order: 0, addedDate: '', entityStatus: 'idle'
             },
             {
                 description: '', title: 'REACT', status: 0, priority: 0, startDate: '',
-                deadline: '', id: '3', listID: '003', order: 0, addedDate: ''
+                deadline: '', id: '3', listID: '003', order: 0, addedDate: '', entityStatus: 'idle'
             },
         ],
         'todolistId2': [
             {
                 description: '', title: 'Terminator', status: 2, priority: 0, startDate: '',
-                deadline: '', id: '1', listID: '001', order: 0, addedDate: ''
+                deadline: '', id: '1', listID: '001', order: 0, addedDate: '', entityStatus: 'idle'
             },
             {
                 description: '', title: 'The Godfather', status: 0, priority: 0, startDate: '',
-                deadline: '', id: '2', listID: '002', order: 0, addedDate: ''
+                deadline: '', id: '2', listID: '002', order: 0, addedDate: '', entityStatus: 'idle'
             },
             {
                 description: '', title: 'Star Wars', status: 0, priority: 0, startDate: '',
-                deadline: '', id: '3', listID: '003', order: 0, addedDate: ''
+                deadline: '', id: '3', listID: '003', order: 0, addedDate: '', entityStatus: 'idle'
             }
         ],
     }
