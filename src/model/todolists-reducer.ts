@@ -3,6 +3,7 @@ import { AppThunk } from './store';
 import { RequestStatusType, setAppErrorAC, setAppStatusAC } from './app-reducer';
 import { handleServerAppError, handleServerNetworkError } from '../utils/app-utils';
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { getTasksTC } from './task-reducer';
 
 const initialState: TodoListDomainType[] = []
 
@@ -20,6 +21,8 @@ export const todolistsReducer = ( state = initialState, action: TodolistsActions
             return state.map(tl => tl.id === action.payload.id ? {...tl, entityStatus: action.payload.status} : tl)
         case 'SET-TODOS':
             return action.todos.map(tl => ({...tl, filter: 'ALL', entityStatus: 'idle'}))
+        case 'CLEAR-TODOS':
+            return []
         default:
             return state
     }
@@ -38,11 +41,25 @@ export const changeTodolistStatusAC = ( id: string, status: RequestStatusType ) 
     ({type: 'CHANGE-TODOLIST-ENTITY-STATUS', payload: {id, status}} as const)
 export const setTodosAC = ( todos: TodoListType[] ) =>
     ({type: 'SET-TODOS', todos} as const)
+export const clearTodosAC = () =>
+    ({type: 'CLEAR-TODOS'} as const)
 
 // thunks
 export const getTodosTC = (): AppThunk => async dispatch => {
-    const res = await api.getTodos()
-    dispatch(setTodosAC(res.data))
+    try {
+        dispatch(setAppStatusAC('loading'))
+        const res = await api.getTodos()
+        dispatch(setTodosAC(res.data))
+        res.data.forEach(tl => {
+            dispatch(getTasksTC(tl.id))
+        })
+    } catch (e: unknown) {
+        if (axios.isAxiosError<ErrorType>(e) && e.response?.data.messages[0]?.message) {
+            handleServerNetworkError({message: e.response.data.messages[0].message}, dispatch)
+        } else {
+            handleServerNetworkError({message: (e as Error).message}, dispatch)
+        }
+    }
 }
 export const deleteTodoTC = ( listID: string ): AppThunk => async dispatch => {
     try {
@@ -114,6 +131,7 @@ export type AddTodolistActionType = ReturnType<typeof addTodolistAC>
 export type RemoveTodolistActionType = ReturnType<typeof deleteTodolistAC>
 export type SetTodosType = ReturnType<typeof setTodosAC>
 export type ChangeTodolistStatusType = ReturnType<typeof changeTodolistStatusAC>
+export type ClearTodosType = ReturnType<typeof clearTodosAC>
 
 export type TodolistsActionsType =
     | SetTodosType
@@ -122,6 +140,7 @@ export type TodolistsActionsType =
     | ChangeTodolistStatusType
     | ReturnType<typeof changeTodolistTitleAC>
     | ReturnType<typeof changeTodolistFilterAC>
+    | ClearTodosType
 
 export type TodoListDomainType = TodoListType & {
     filter: FilterType,

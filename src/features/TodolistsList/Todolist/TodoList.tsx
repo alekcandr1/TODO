@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useSelector } from 'react-redux';
 import { AppRootStateType, useAppDispatch } from '../../../model/store';
-import { addTaskTC, getTasksTC, TaskDomainType, TasksDomainType } from '../../../model/task-reducer';
+import { addTaskTC, getTasksTC, TaskDomainType } from '../../../model/task-reducer';
 import {
     changeTodolistFilterAC,
     changeTodoTitleTC,
@@ -16,7 +16,6 @@ import {
 } from '../../../model/todolists-reducer';
 import ButtonContainer from '../../../components/Button/ButtonContainer';
 import { Task } from './Task/Task';
-import { TaskType } from '../../../api/api';
 
 export type TodoListPropsType = {
     list: TodoListDomainType
@@ -26,9 +25,9 @@ export const TodoList = memo(( {list}: TodoListPropsType ) => {
     const dispatch = useAppDispatch()
     const {id, title, filter, entityStatus} = list
 
-    useEffect(() => {
-        dispatch(getTasksTC(id))
-    }, [dispatch, id])
+    // useEffect(() => {
+    //     dispatch(getTasksTC(id))
+    // }, [dispatch, id])
 
     let tasks = useSelector<AppRootStateType, TaskDomainType[]>(state => state.tasks[id])
 

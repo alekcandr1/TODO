@@ -13,16 +13,16 @@ import { Navigate } from 'react-router-dom';
 type TodolistsListPropsType = {}
 export const TodolistsList: React.FC<TodolistsListPropsType> = () => {
     let dispatch = useAppDispatch()
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
     useEffect(() => {
         if (!isLoggedIn) {
             return
         }
         dispatch(getTodosTC())
-    }, [dispatch])
+    }, [dispatch, isLoggedIn])
 
     let todoLists = useSelector<AppRootStateType, TodoListDomainType[]>(state => state.todolists)
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
     const addTodoList = useCallback(
         ( todoListTitle: string ) => {

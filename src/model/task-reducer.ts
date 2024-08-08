@@ -1,7 +1,6 @@
 import {
     AddTodolistActionType,
-    changeTodolistStatusAC,
-    RemoveTodolistActionType,
+    changeTodolistStatusAC, ClearTodosType, RemoveTodolistActionType,
     SetTodosType
 } from './todolists-reducer';
 import { api, STATUS_CODE, TaskType, UpdateTaskModelType } from '../api/api';
@@ -61,6 +60,8 @@ export const tasksReducer = ( state: TasksDomainType = initialState, action: Tas
                         : t
                 )
             }
+        case 'CLEAR-TODOS':
+            return {}
         default:
             return state
     }
@@ -166,3 +167,4 @@ export type TasksActionsType =
     | ReturnType<typeof changeTaskEntityStatusAC>
     | SetAppStatusType
     | SetAppErrorType
+    | ClearTodosType
