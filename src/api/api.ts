@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from 'axios';
-import { RequestStatusType } from '../model/app-reducer';
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1',
@@ -8,6 +7,7 @@ const instance = axios.create({
         'API-KEY': '78c0a0ee-da0b-4710-ac11-ab8b526808e2'
     }
 })
+
 export enum STATUS_CODE {
     SUCCESS = 0,
     ERROR = 1,
@@ -15,6 +15,32 @@ export enum STATUS_CODE {
 }
 
 // api
+
+export type AuthValues = {
+    email: string
+    password: string
+    rememberMe?: boolean
+    captcha?: boolean
+}
+export type MeType = {
+    id: number,
+    email: string,
+    login: string
+}
+
+export const authAPI = {
+    login: ( values: AuthValues ) => {
+        return instance.post<ResponseType<{userId: number}>>('/auth/login', values);
+    },
+    logout: () => {
+        return instance.delete<ResponseType>('/auth/login');
+
+    },
+    me: () => {
+        return instance.get<ResponseType<MeType>>('/auth/me');
+    },
+}
+
 export const api = {
     getTodos: () => {
         return instance.get<TodoListType[]>('/todo-lists');
@@ -39,9 +65,10 @@ export const api = {
         return instance.delete<ResponseType>(`/todo-lists/${ listID }/tasks/${ taskID }`)
     },
     updateTask: ( listID: string, taskID: string, model: UpdateTaskModelType ) => {
-        return instance.put<ResponseType<{ item: TaskType }>, AxiosResponse<ResponseType<{ item: TaskType }>>>(`/todo-lists/${ listID }/tasks/${ taskID }`, model)
+        return instance.put<ResponseType<{item: TaskType}>, AxiosResponse<ResponseType<{
+            item: TaskType
+        }>>>(`/todo-lists/${ listID }/tasks/${ taskID }`, model)
     },
-
 }
 
 //types
@@ -64,6 +91,7 @@ export enum TaskStatuses {
     Completed = 2,
     Draft = 3
 }
+
 export enum TaskPriorities {
     Low = 0,
     Middle = 1,

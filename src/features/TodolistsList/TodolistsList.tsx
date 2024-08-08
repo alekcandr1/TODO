@@ -8,22 +8,31 @@ import { useCallback, useEffect } from 'react';
 import { addTodoTC, getTodosTC, TodoListDomainType } from '../../model/todolists-reducer';
 import { useSelector } from 'react-redux';
 import { AddItemForm } from '../../components/AddItemForm/AddItemForm';
+import { Navigate } from 'react-router-dom';
 
 type TodolistsListPropsType = {}
-export const TodolistsList: React.FC<TodolistsListPropsType> = ( props ) => {
+export const TodolistsList: React.FC<TodolistsListPropsType> = () => {
     let dispatch = useAppDispatch()
 
     useEffect(() => {
+        if (!isLoggedIn) {
+            return
+        }
         dispatch(getTodosTC())
     }, [dispatch])
 
     let todoLists = useSelector<AppRootStateType, TodoListDomainType[]>(state => state.todolists)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
     const addTodoList = useCallback(
         ( todoListTitle: string ) => {
             dispatch(addTodoTC(todoListTitle))
         }, [dispatch]
     )
+
+    if (!isLoggedIn) {
+        return <Navigate to={'/login'} />
+    }
 
     return <>
         <Grid container className={ 'head' } direction="column">
