@@ -1,6 +1,6 @@
 import { api, ErrorType, STATUS_CODE, TodoListType } from "api/api"
 import { AppThunk } from "./store"
-import { RequestStatusType, setAppStatusAC } from "./app-reducer"
+import { RequestStatusType, setAppStatus } from "model/appSlice"
 import { handleServerAppError, handleServerNetworkError } from "utils/app-utils"
 import axios from "axios"
 import { getTasksTC } from "./task-reducer"
@@ -43,7 +43,7 @@ export const clearTodosAC = () => ({ type: "CLEAR-TODOS" }) as const
 // thunks
 export const getTodosTC = (): AppThunk => async (dispatch) => {
   try {
-    dispatch(setAppStatusAC("loading"))
+    dispatch(setAppStatus({ status: "loading" }))
     const res = await api.getTodos()
     dispatch(setTodosAC(res.data))
     res.data.forEach((tl) => {
@@ -61,13 +61,13 @@ export const deleteTodoTC =
   (listID: string): AppThunk =>
   async (dispatch) => {
     try {
-      dispatch(setAppStatusAC("loading"))
+      dispatch(setAppStatus({ status: "loading" }))
       dispatch(changeTodolistStatusAC(listID, "loading"))
       const res = await api.deleteTodos(listID)
 
       if (res.data.resultCode === STATUS_CODE.SUCCESS) {
         dispatch(deleteTodolistAC(listID))
-        dispatch(setAppStatusAC("succeeded"))
+        dispatch(setAppStatus({ status: "succeeded" }))
       } else {
         handleServerAppError(res.data, dispatch)
       }
@@ -85,12 +85,12 @@ export const addTodoTC =
   (title: string): AppThunk =>
   async (dispatch) => {
     try {
-      dispatch(setAppStatusAC("loading"))
+      dispatch(setAppStatus({ status: "loading" }))
       const res = await api.addTodo(title)
 
       if (res.data.resultCode === STATUS_CODE.SUCCESS) {
         dispatch(addTodolistAC(res.data.data.item))
-        dispatch(setAppStatusAC("succeeded"))
+        dispatch(setAppStatus({ status: "succeeded" }))
       } else {
         handleServerAppError(res.data, dispatch)
       }
@@ -106,13 +106,13 @@ export const changeTodoTitleTC =
   (listID: string, newTitle: string): AppThunk =>
   async (dispatch) => {
     try {
-      dispatch(setAppStatusAC("loading"))
+      dispatch(setAppStatus({ status: "loading" }))
       dispatch(changeTodolistStatusAC(listID, "loading"))
       const res = await api.changeTodoTitle(listID, newTitle)
 
       if (res.data.resultCode === STATUS_CODE.SUCCESS) {
         dispatch(changeTodolistTitleAC(listID, newTitle))
-        dispatch(setAppStatusAC("succeeded"))
+        dispatch(setAppStatus({ status: "succeeded" }))
       } else {
         handleServerAppError(res.data, dispatch)
       }

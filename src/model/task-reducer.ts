@@ -5,10 +5,10 @@ import {
   RemoveTodolistActionType,
   SetTodosType,
 } from "./todolists-reducer"
-import { api, STATUS_CODE, TaskType, UpdateTaskModelType } from "../api/api"
+import { api, STATUS_CODE, TaskType, UpdateTaskModelType } from "api/api"
 import { AppThunk } from "./store"
-import { RequestStatusType, SetAppErrorType, setAppStatusAC, SetAppStatusType } from "./app-reducer"
-import { handleServerAppError, handleServerNetworkError } from "../utils/app-utils"
+import { RequestStatusType, setAppStatus } from "model/appSlice"
+import { handleServerAppError, handleServerNetworkError } from "utils/app-utils"
 
 const initialState: TasksDomainType = {}
 
@@ -82,12 +82,12 @@ export const changeTaskEntityStatusAC = (listID: string, taskID: string, status:
 export const getTasksTC =
   (listID: string): AppThunk =>
   (dispatch) => {
-    dispatch(setAppStatusAC("loading"))
+    dispatch(setAppStatus({ status: "loading" }))
     api
       .getTasks(listID)
       .then((res) => {
         dispatch(setTasksAC(listID, res.data.items))
-        dispatch(setAppStatusAC("succeeded"))
+        dispatch(setAppStatus({ status: "succeeded" }))
       })
       .catch((err) => {
         handleServerNetworkError(err, dispatch)
@@ -96,14 +96,14 @@ export const getTasksTC =
 export const addTaskTC =
   (listID: string, title: string): AppThunk =>
   (dispatch) => {
-    dispatch(setAppStatusAC("loading"))
+    dispatch(setAppStatus({ status: "loading" }))
     dispatch(changeTodolistStatusAC(listID, "loading"))
     api
       .addTask(listID, title)
       .then((res) => {
         if (res.data.resultCode === STATUS_CODE.SUCCESS) {
           dispatch(addTaskAC(listID, res.data.data.item))
-          dispatch(setAppStatusAC("succeeded"))
+          dispatch(setAppStatus({ status: "succeeded" }))
         } else {
           handleServerAppError(res.data, dispatch)
         }
@@ -118,14 +118,14 @@ export const addTaskTC =
 export const deleteTaskTC =
   (listID: string, taskID: string): AppThunk =>
   (dispatch) => {
-    dispatch(setAppStatusAC("loading"))
+    dispatch(setAppStatus({ status: "loading" }))
     dispatch(changeTaskEntityStatusAC(listID, taskID, "loading"))
     api
       .deleteTask(listID, taskID)
       .then((res) => {
         if (res.data.resultCode === STATUS_CODE.SUCCESS) {
           dispatch(removeTaskAC(listID, taskID))
-          dispatch(setAppStatusAC("succeeded"))
+          dispatch(setAppStatus({ status: "succeeded" }))
         } else {
           handleServerAppError(res.data, dispatch)
         }
@@ -140,14 +140,14 @@ export const deleteTaskTC =
 export const updateTaskTC =
   (listID: string, taskID: string, model: UpdateTaskModelType): AppThunk =>
   (dispatch) => {
-    dispatch(setAppStatusAC("loading"))
+    dispatch(setAppStatus({ status: "loading" }))
     dispatch(changeTaskEntityStatusAC(listID, taskID, "loading"))
     api
       .updateTask(listID, taskID, model)
       .then((res) => {
         if (res.data.resultCode === STATUS_CODE.SUCCESS) {
           dispatch(changeTaskAC(listID, taskID, res.data.data.item))
-          dispatch(setAppStatusAC("succeeded"))
+          dispatch(setAppStatus({ status: "succeeded" }))
         } else {
           handleServerAppError(res.data, dispatch)
         }
@@ -176,6 +176,4 @@ export type TasksActionsType =
   | ReturnType<typeof setTasksAC>
   | ReturnType<typeof changeTaskAC>
   | ReturnType<typeof changeTaskEntityStatusAC>
-  | SetAppStatusType
-  | SetAppErrorType
   | ClearTodosType

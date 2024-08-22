@@ -1,4 +1,4 @@
-import { setAppStatusAC } from "./app-reducer"
+import { setAppStatus } from "model/appSlice"
 import { authAPI, AuthValues, STATUS_CODE } from "api/api"
 import { handleServerAppError, handleServerNetworkError } from "utils/app-utils"
 import { clearTodosAC } from "./todolists-reducer"
@@ -29,13 +29,13 @@ export const { setIsLoggedIn, setIsInitialized } = slice.actions
 export const loginTC =
   (data: AuthValues): AppThunk =>
   (dispatch) => {
-    dispatch(setAppStatusAC("loading"))
+    dispatch(setAppStatus({ status: "loading" }))
     authAPI
       .login(data)
       .then((res) => {
         if (res.data.resultCode === STATUS_CODE.SUCCESS) {
           dispatch(setIsLoggedIn({ isLoggedIn: true }))
-          dispatch(setAppStatusAC("succeeded"))
+          dispatch(setAppStatus({ status: "succeeded" }))
         } else {
           handleServerAppError(res.data, dispatch)
         }
@@ -61,13 +61,13 @@ export const meTC = (): AppThunk => (dispatch) => {
     })
 }
 export const logoutTC = (): AppThunk => (dispatch) => {
-  dispatch(setAppStatusAC("loading"))
+  dispatch(setAppStatus({ status: "loading" }))
   authAPI
     .logout()
     .then((res) => {
       if (res.data.resultCode === STATUS_CODE.SUCCESS) {
         dispatch(setIsLoggedIn({ isLoggedIn: false }))
-        dispatch(setAppStatusAC("succeeded"))
+        dispatch(setAppStatus({ status: "succeeded" }))
         dispatch(clearTodosAC())
       } else {
         handleServerAppError(res.data, dispatch)
