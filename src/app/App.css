@@ -2,52 +2,51 @@ body {
 }
 
 .error {
-    border: red 1px solid;
+  border: red 1px solid;
 }
 
 .error-message {
-    color: red;
+  color: red;
 }
 
 .active-filter {
-    background-color: lightgreen;
+  background-color: lightgreen;
 }
 
 .is-done {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
 .todolist-title-container {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .todolist {
-    padding: 30px 40px;
-    background-color: #f3f3f3;
-    /*border-radius: 20px;*/
-    margin-bottom: 30px;
-    /*width: max-content;*/
+  padding: 30px 40px;
+  background-color: #f3f3f3;
+  /*border-radius: 20px;*/
+  margin-bottom: 30px;
+  /*width: max-content;*/
 }
 
 h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 
 .todolists {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 .app-bar {
-    margin-bottom: 30px;
-    position: absolute;
-    top: 0;
-    left: 0;
+  margin-bottom: 30px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .main-content {
-    padding: 30px;
+  padding: 30px;
 }
 .head {
-    padding-bottom: 20px;
+  padding-bottom: 20px;
 }
-

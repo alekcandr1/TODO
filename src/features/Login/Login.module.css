@@ -1,7 +1,9 @@
 .red {
-    color: red;
+  color: red;
 }
 
-.white, .white a, .white p {
-    color: #f3f3f3
+.white,
+.white a,
+.white p {
+  color: #f3f3f3;
 }

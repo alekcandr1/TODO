@@ -1,30 +1,43 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import React from 'react';
-import { Task } from './Task';
-import { ReduxStoreProviderDecorator } from '../../../../ReduxStoreProviderDecorator';
+import type { Meta, StoryObj } from "@storybook/react"
+import React from "react"
+import { Task } from "./Task"
+import { ReduxStoreProviderDecorator } from "../../../../ReduxStoreProviderDecorator"
 
 // META
 const meta = {
-    title: 'TODOLISTS/Task',
-    component: Task,
-    parameters: {
-        layout: 'centered',
+  title: "TODOLISTS/Task",
+  component: Task,
+  parameters: {
+    layout: "centered",
+  },
+  tags: ["autodocs"],
+  argTypes: {},
+  args: {
+    task: {
+      id: "1",
+      title: "JS",
+      status: 0,
+      deadline: "",
+      startDate: "",
+      listID: "todolistId1",
+      priority: 0,
+      description: "",
+      addedDate: "",
+      order: 1,
+      entityStatus: "idle",
     },
-    tags: ['autodocs'],
-    argTypes: {},
-    args: {
-        task: {id: '1', title: 'JS', status: 0, deadline: '', startDate: '', listID: 'todolistId1', priority: 0, description: '', addedDate: '', order: 1, entityStatus: 'idle'},
-        listID: 'todolistId1'
-    },
-    decorators: [ReduxStoreProviderDecorator]
-} satisfies Meta<typeof Task>;
+    listID: "todolistId1",
+  },
+  decorators: [ReduxStoreProviderDecorator],
+} satisfies Meta<typeof Task>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
-//
-// export const TaskStory: Story = {
-//     render: () => null
-// };
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const TaskStory: Story = {
+  // render: () => null,
+}
+
 //
 // const TaskToggle = () => {
 //

@@ -1,36 +1,36 @@
-import React from 'react'
-import { Provider } from 'react-redux';
-import { AppRootStateType } from './model/store';
-import { combineReducers, legacy_createStore } from 'redux';
-import { tasksReducer } from './model/task-reducer';
-import { todolistsReducer } from './model/todolists-reducer';
-import { v1 } from 'uuid';
+import React from "react"
+import { Provider } from "react-redux"
+import { AppRootStateType } from "./model/store"
+import { combineReducers, legacy_createStore } from "redux"
+import { tasksReducer } from "./model/task-reducer"
+import { todolistsReducer } from "./model/todolists-reducer"
+import { v1 } from "uuid"
 
 const rootReducer = combineReducers({
-    tasks: tasksReducer,
-    todolists: todolistsReducer
+  tasks: tasksReducer,
+  todolists: todolistsReducer,
 })
 
 const initialGlobalState = {
-    todolists: [
-        {listID: 'todolistId1', title: 'What to learn', filter: 'all'},
-        {listID: 'todolistId2', title: 'What to buy', filter: 'all'}
+  todolists: [
+    { listID: "todolistId1", title: "What to learn", filter: "all" },
+    { listID: "todolistId2", title: "What to buy", filter: "all" },
+  ],
+  tasks: {
+    ["todolistId1"]: [
+      { id: v1(), title: "HTML&CSS", isDone: true },
+      { id: v1(), title: "JS", isDone: false },
     ],
-    tasks: {
-        ['todolistId1']: [
-            {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: false}
-        ],
-        ['todolistId2']: [
-            {id: v1(), title: 'Milk', isDone: false},
-            {id: v1(), title: 'React Book', isDone: true}
-        ]
-    }
-};
+    ["todolistId2"]: [
+      { id: v1(), title: "Milk", isDone: false },
+      { id: v1(), title: "React Book", isDone: true },
+    ],
+  },
+}
 
 // export const storyBookStore = legacy_createStore(rootReducer);
 export const storyBookStore = legacy_createStore(rootReducer, initialGlobalState as any)
 
-export const ReduxStoreProviderDecorator = ( storyFn: () => React.ReactNode ) => {
-    return <Provider store={ storyBookStore }>{ storyFn() }</Provider>
+export const ReduxStoreProviderDecorator = (storyFn: () => React.ReactNode) => {
+  return <Provider store={storyBookStore}>{storyFn()}</Provider>
 }
