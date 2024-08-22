@@ -4,7 +4,7 @@ import { TodolistsActionsType, todolistsReducer } from "./todolists-reducer"
 import { ThunkAction, ThunkDispatch } from "redux-thunk"
 import { useDispatch } from "react-redux"
 import { appReducer } from "./app-reducer"
-import { authReducer } from "./auth-reducer"
+import { authReducer } from "model/authSlice"
 import { configureStore, UnknownAction } from "@reduxjs/toolkit"
 
 // объединяя reducer-ы с помощью combineReducers,

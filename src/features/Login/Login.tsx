@@ -9,8 +9,8 @@ import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import { useFormik } from "formik"
 import s from "./Login.module.css"
-import { AppRootStateType, useAppDispatch } from "../../model/store"
-import { loginTC } from "../../model/auth-reducer"
+import { AppRootStateType, useAppDispatch } from "model/store"
+import { loginTC } from "model/authSlice"
 import { Navigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 
@@ -64,7 +64,7 @@ export const Login = () => {
             <FormLabel className={s.white}>
               <p>
                 To log in get registered{" "}
-                <a href={"https://social-network.samuraijs.com/"} target={"_blank"}>
+                <a href={"https://social-network.samuraijs.com/"} rel="noreferrer" target={"_blank"}>
                   here
                 </a>
               </p>
