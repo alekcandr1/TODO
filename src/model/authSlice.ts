@@ -1,10 +1,9 @@
 import { setAppStatus } from "model/appSlice"
 import { authAPI, AuthValues, STATUS_CODE } from "api/api"
 import { handleServerAppError, handleServerNetworkError } from "utils/app-utils"
-import { clearTodosAC } from "./todolists-reducer"
-
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AppThunk } from "model/store"
+import { clearTodos } from "model/todolistsSlice"
 
 const slice = createSlice({
   name: "auth",
@@ -68,7 +67,7 @@ export const logoutTC = (): AppThunk => (dispatch) => {
       if (res.data.resultCode === STATUS_CODE.SUCCESS) {
         dispatch(setIsLoggedIn({ isLoggedIn: false }))
         dispatch(setAppStatus({ status: "succeeded" }))
-        dispatch(clearTodosAC())
+        dispatch(clearTodos())
       } else {
         handleServerAppError(res.data, dispatch)
       }

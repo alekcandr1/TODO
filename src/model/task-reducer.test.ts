@@ -1,6 +1,6 @@
-import { addTodolistAC } from "./todolists-reducer"
+import { addTodolist } from "model/todolistsSlice"
 import { v1 } from "uuid"
-import { addTaskAC, changeTaskAC, removeTaskAC, TasksDomainType, tasksReducer } from "./task-reducer"
+import { addTask, updateTask, removeTask, TasksDomainType, tasksReducer } from "model/tasksSlice"
 
 let startState: TasksDomainType
 let todolistID1: string
@@ -19,7 +19,7 @@ beforeEach(() => {
         startDate: "",
         deadline: "",
         id: "1",
-        listID: "001",
+        todoListId: "001",
         order: 0,
         addedDate: "",
         entityStatus: "idle",
@@ -32,7 +32,7 @@ beforeEach(() => {
         startDate: "",
         deadline: "",
         id: "2",
-        listID: "002",
+        todoListId: "002",
         order: 0,
         addedDate: "",
         entityStatus: "idle",
@@ -45,7 +45,7 @@ beforeEach(() => {
         startDate: "",
         deadline: "",
         id: "3",
-        listID: "003",
+        todoListId: "003",
         order: 0,
         addedDate: "",
         entityStatus: "idle",
@@ -60,7 +60,7 @@ beforeEach(() => {
         startDate: "",
         deadline: "",
         id: "1",
-        listID: "001",
+        todoListId: "001",
         order: 0,
         addedDate: "",
         entityStatus: "idle",
@@ -73,7 +73,7 @@ beforeEach(() => {
         startDate: "",
         deadline: "",
         id: "2",
-        listID: "002",
+        todoListId: "002",
         order: 0,
         addedDate: "",
         entityStatus: "idle",
@@ -86,7 +86,7 @@ beforeEach(() => {
         startDate: "",
         deadline: "",
         id: "3",
-        listID: "003",
+        todoListId: "003",
         order: 0,
         addedDate: "",
         entityStatus: "idle",
@@ -96,23 +96,25 @@ beforeEach(() => {
 })
 
 test("remove correct task", () => {
-  const endState = tasksReducer(startState, removeTaskAC(todolistID2, "2"))
+  const endState = tasksReducer(startState, removeTask({ todolistId: todolistID2, taskId: "2" }))
   expect(endState[todolistID2][1].id).toBe("3")
 })
 
 test("correct task should be added to correct array", () => {
   const title = "juce"
-  const action = addTaskAC(todolistID2, {
-    description: "",
-    title,
-    status: 0,
-    priority: 0,
-    startDate: "",
-    deadline: "",
-    id: "3",
-    listID: "001",
-    order: 0,
-    addedDate: "",
+  const action = addTask({
+    task: {
+      description: "",
+      title,
+      status: 0,
+      priority: 0,
+      startDate: "",
+      deadline: "",
+      id: "3",
+      todoListId: "001",
+      order: 0,
+      addedDate: "",
+    },
   })
 
   const endState = tasksReducer(startState, action)
@@ -125,17 +127,21 @@ test("correct task should be added to correct array", () => {
 })
 
 test("status of specified task should be changed", () => {
-  const action = changeTaskAC(todolistID2, "2", {
-    description: "",
-    title: "The Godfather",
-    status: 2,
-    priority: 0,
-    startDate: "",
-    deadline: "",
-    id: "2",
-    listID: "002",
-    order: 0,
-    addedDate: "",
+  const action = updateTask({
+    taskId: "2",
+    todolistId: todolistID2,
+    model: {
+      description: "",
+      title: "The Godfather",
+      status: 2,
+      priority: 0,
+      startDate: "",
+      deadline: "",
+      id: "2",
+      todoListId: "002",
+      order: 0,
+      addedDate: "",
+    },
   })
 
   const endState = tasksReducer(startState, action)
@@ -145,17 +151,21 @@ test("status of specified task should be changed", () => {
 })
 
 test("title of specified task should be changed", () => {
-  const action = changeTaskAC(todolistID2, "2", {
-    description: "",
-    title: "juice",
-    status: 2,
-    priority: 0,
-    startDate: "",
-    deadline: "",
-    id: "2",
-    listID: "002",
-    order: 0,
-    addedDate: "",
+  const action = updateTask({
+    taskId: "2",
+    todolistId: todolistID2,
+    model: {
+      description: "",
+      title: "juice",
+      status: 2,
+      priority: 0,
+      startDate: "",
+      deadline: "",
+      id: "2",
+      todoListId: "002",
+      order: 0,
+      addedDate: "",
+    },
   })
   const endState = tasksReducer(startState, action)
 
@@ -163,7 +173,7 @@ test("title of specified task should be changed", () => {
 })
 
 test("new array should be added when new todolist is added", () => {
-  const action = addTodolistAC({ id: v1(), title: "What to learn", addedDate: "null", order: 1 })
+  const action = addTodolist({ todolist: { id: v1(), title: "What to learn", addedDate: "null", order: 1 } })
 
   const endState = tasksReducer(startState, action)
 

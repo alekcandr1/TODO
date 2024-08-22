@@ -1,20 +1,20 @@
 import * as React from "react"
 import { List, ListItem } from "@mui/material"
-import { memo, useCallback, useEffect, useMemo } from "react"
-import { AddItemForm } from "../../../components/AddItemForm/AddItemForm"
-import { EditableSpan } from "../../../components/EditableSpan/EditableSpan"
+import { memo, useCallback, useMemo } from "react"
+import { AddItemForm } from "components/AddItemForm/AddItemForm"
+import { EditableSpan } from "components/EditableSpan/EditableSpan"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { useSelector } from "react-redux"
-import { AppRootStateType, useAppDispatch } from "../../../model/store"
-import { addTaskTC, getTasksTC, TaskDomainType } from "../../../model/task-reducer"
+import { AppRootStateType, useAppDispatch } from "model/store"
+import { addTaskTC, TaskDomainType } from "model/tasksSlice"
 import {
-  changeTodolistFilterAC,
+  changeTodolistFilter,
   changeTodoTitleTC,
   deleteTodoTC,
   FilterType,
   TodoListDomainType,
-} from "../../../model/todolists-reducer"
+} from "model/todolistsSlice"
 import ButtonContainer from "../../../components/Button/ButtonContainer"
 import { Task } from "./Task/Task"
 
@@ -47,7 +47,7 @@ export const TodoList = memo(({ list }: TodoListPropsType) => {
 
   const changeFilterHandler = useCallback(
     (filter: FilterType) => {
-      dispatch(changeTodolistFilterAC(id, filter))
+      dispatch(changeTodolistFilter({ id, filter }))
     },
     [dispatch, id],
   )

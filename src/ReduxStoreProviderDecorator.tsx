@@ -1,14 +1,13 @@
 import React from "react"
 import { Provider } from "react-redux"
-import { AppRootStateType } from "./model/store"
 import { combineReducers, legacy_createStore } from "redux"
-import { tasksReducer } from "./model/task-reducer"
-import { todolistsReducer } from "./model/todolists-reducer"
+import { tasksReducer } from "model/tasksSlice"
+import { todosReducer } from "model/todolistsSlice"
 import { v1 } from "uuid"
 
 const rootReducer = combineReducers({
   tasks: tasksReducer,
-  todolists: todolistsReducer,
+  todolists: todosReducer,
 })
 
 const initialGlobalState = {
