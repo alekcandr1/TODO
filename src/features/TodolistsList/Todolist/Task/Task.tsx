@@ -1,12 +1,12 @@
 // @flow
 import * as React from "react"
 import { Checkbox } from "@mui/material"
-import { EditableSpan } from "../../../../components/EditableSpan/EditableSpan"
+import { EditableSpan } from "components/EditableSpan/EditableSpan"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { ChangeEvent, useCallback } from "react"
 import { deleteTaskTC, TaskDomainType, updateTaskTC } from "model/tasksSlice"
-import { useDispatch } from "react-redux"
+import { useAppDispatch } from "model/store"
 
 type TaskProps = {
   task: TaskDomainType
@@ -14,7 +14,7 @@ type TaskProps = {
 }
 export const Task = React.memo(({ task, listID }: TaskProps) => {
   console.log("Task")
-  let dispatch = useDispatch()
+  let dispatch = useAppDispatch()
 
   const removeTaskHandler = useCallback(() => {
     dispatch(deleteTaskTC(listID, task.id))
