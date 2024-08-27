@@ -5,6 +5,7 @@ import { handleServerAppError, handleServerNetworkError } from "utils/app-utils"
 import axios from "axios"
 import { getTasksTC } from "model/tasksSlice"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { clearTasksAndTodolists } from "common/actions/common.actions"
 
 const slice = createSlice({
   name: "todos",
@@ -42,9 +43,11 @@ const slice = createSlice({
         state.push({ ...tl, filter: "ALL", entityStatus: "idle" })
       })
     },
-    clearTodos: (state, action: PayloadAction) => {
+  },
+  extraReducers: (builder) => {
+    builder.addCase(clearTasksAndTodolists, () => {
       return []
-    },
+    })
   },
 })
 
@@ -55,7 +58,6 @@ export const {
   changeTodolistTitle,
   deleteTodolist,
   setTodos,
-  clearTodos,
   addTodolist,
 } = slice.actions
 

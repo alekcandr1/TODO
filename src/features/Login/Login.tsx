@@ -12,11 +12,12 @@ import s from "./Login.module.css"
 import { AppRootStateType, useAppDispatch } from "model/store"
 import { loginTC } from "model/authSlice"
 import { Navigate } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useAppSelector } from "common/hooks/hooks"
+import { selectIsLoggedIn } from "common/selectors/auth.selectors"
 
 export const Login = () => {
   const dispatch = useAppDispatch()
-  const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn)
+  const isLoggedIn = useAppSelector<AppRootStateType, boolean>(selectIsLoggedIn)
 
   type FormikErrorType = {
     email?: string

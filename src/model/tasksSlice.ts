@@ -1,9 +1,10 @@
-import { addTodolist, changeTodolistStatus, clearTodos, deleteTodolist, setTodos } from "model/todolistsSlice"
+import { addTodolist, changeTodolistStatus, deleteTodolist, setTodos } from "model/todolistsSlice"
 import { api, STATUS_CODE, TaskType, UpdateTaskModelType } from "api/api"
 import { AppThunk } from "./store"
 import { RequestStatusType, setAppStatus } from "model/appSlice"
 import { handleServerAppError, handleServerNetworkError } from "utils/app-utils"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { clearTasksAndTodolists } from "common/actions/common.actions"
 
 const slice = createSlice({
   name: "tasks",
@@ -60,7 +61,7 @@ const slice = createSlice({
           state[tl.id] = []
         })
       })
-      .addCase(clearTodos, (state, action: PayloadAction) => {
+      .addCase(clearTasksAndTodolists, () => {
         return {}
       })
   },

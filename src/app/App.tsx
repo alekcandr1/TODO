@@ -8,24 +8,26 @@ import MenuIcon from "@mui/icons-material/Menu"
 import Container from "@mui/material/Container"
 import Grid from "@mui/material/Unstable_Grid2"
 import LinearProgress from "@mui/material/LinearProgress/LinearProgress"
-import { useSelector } from "react-redux"
 import { AppRootStateType, useAppDispatch } from "model/store"
 import { RequestStatusType } from "model/appSlice"
 import { ErrorSnackbar } from "components/ErrorSnackbar/ErrorSnackbar"
 import { Navigate, Outlet } from "react-router-dom"
 import { logoutTC, meTC } from "model/authSlice"
 import CircularProgress from "@mui/material/CircularProgress"
+import { useAppSelector } from "common/hooks/hooks"
+import { selectorAppStatus } from "common/selectors/app.selectors"
+import { selectIsInitialized, selectIsLoggedIn } from "common/selectors/auth.selectors"
 
 function App() {
   const dispatch = useAppDispatch()
-  const isInitialized = useSelector<AppRootStateType, boolean>((state) => state.auth.isInitialized)
-  const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn)
+
+  const isInitialized = useAppSelector<AppRootStateType, boolean>(selectIsInitialized)
+  const isLoggedIn = useAppSelector<AppRootStateType, boolean>(selectIsLoggedIn)
+  const status = useAppSelector<AppRootStateType, RequestStatusType>(selectorAppStatus)
 
   useEffect(() => {
     dispatch(meTC())
   }, [dispatch])
-
-  const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
 
   if (!isInitialized) {
     return (

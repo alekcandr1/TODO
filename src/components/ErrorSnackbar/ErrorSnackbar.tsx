@@ -1,16 +1,17 @@
 import React from "react"
 import Snackbar from "@mui/material/Snackbar"
 import MuiAlert, { AlertProps } from "@mui/material/Alert"
-import { useSelector } from "react-redux"
 import { AppRootStateType, useAppDispatch } from "model/store"
 import { setAppError } from "model/appSlice"
+import { selectorAppError } from "common/selectors/app.selectors"
+import { useAppSelector } from "common/hooks/hooks"
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
 })
 
 export function ErrorSnackbar() {
-  const error = useSelector<AppRootStateType, string | null>((state) => state.app.error)
+  const error = useAppSelector<AppRootStateType, string | null>(selectorAppError)
   const dispatch = useAppDispatch()
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") {

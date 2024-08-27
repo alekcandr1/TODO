@@ -1,13 +1,12 @@
 import * as React from "react"
-import { List, ListItem } from "@mui/material"
 import { memo, useCallback, useMemo } from "react"
+import { List, ListItem } from "@mui/material"
 import { AddItemForm } from "components/AddItemForm/AddItemForm"
 import { EditableSpan } from "components/EditableSpan/EditableSpan"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
-import { useSelector } from "react-redux"
 import { AppRootStateType, useAppDispatch } from "model/store"
-import { addTaskTC, TaskDomainType } from "model/tasksSlice"
+import { addTaskTC, TasksDomainType } from "model/tasksSlice"
 import {
   changeTodolistFilter,
   changeTodoTitleTC,
@@ -17,6 +16,8 @@ import {
 } from "model/todolistsSlice"
 import ButtonContainer from "../../../components/Button/ButtonContainer"
 import { Task } from "./Task/Task"
+import { selectorTasks } from "common/selectors/tasks.selectors"
+import { useAppSelector } from "common/hooks/hooks"
 
 export type TodoListPropsType = {
   list: TodoListDomainType
@@ -26,7 +27,7 @@ export const TodoList = memo(({ list }: TodoListPropsType) => {
   const dispatch = useAppDispatch()
   const { id, title, filter, entityStatus } = list
 
-  let tasks = useSelector<AppRootStateType, TaskDomainType[]>((state) => state.tasks[id])
+  let tasks = useAppSelector<AppRootStateType, TasksDomainType>(selectorTasks)[id]
 
   tasks = useMemo(() => {
     if (list.filter === "ACTIVE") {

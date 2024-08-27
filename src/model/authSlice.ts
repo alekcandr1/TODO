@@ -3,7 +3,7 @@ import { authAPI, AuthValues, STATUS_CODE } from "api/api"
 import { handleServerAppError, handleServerNetworkError } from "utils/app-utils"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AppThunk } from "model/store"
-import { clearTodos } from "model/todolistsSlice"
+import { clearTasksAndTodolists } from "common/actions/common.actions"
 
 const slice = createSlice({
   name: "auth",
@@ -67,7 +67,7 @@ export const logoutTC = (): AppThunk => (dispatch) => {
       if (res.data.resultCode === STATUS_CODE.SUCCESS) {
         dispatch(setIsLoggedIn({ isLoggedIn: false }))
         dispatch(setAppStatus({ status: "succeeded" }))
-        dispatch(clearTodos())
+        dispatch(clearTasksAndTodolists())
       } else {
         handleServerAppError(res.data, dispatch)
       }
