@@ -3,7 +3,7 @@ import { AppThunk } from "./store"
 import { RequestStatusType, setAppStatus } from "model/appSlice"
 import { handleServerAppError, handleServerNetworkError } from "utils/app-utils"
 import axios from "axios"
-import { getTasksTC } from "model/tasksSlice"
+import { fetchTasks } from "model/tasksSlice"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { clearTasksAndTodolists } from "common/actions/common.actions"
 
@@ -68,7 +68,7 @@ export const getTodosTC = (): AppThunk => async (dispatch) => {
     const res = await api.getTodos()
     dispatch(setTodos({ todos: res.data }))
     res.data.forEach((tl) => {
-      dispatch(getTasksTC(tl.id))
+      dispatch(fetchTasks(tl.id))
     })
   } catch (e: unknown) {
     if (axios.isAxiosError<ErrorType>(e) && e.response?.data.messages[0]?.message) {
