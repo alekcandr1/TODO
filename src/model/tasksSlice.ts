@@ -42,11 +42,6 @@ const slice = createSlice({
         tasks[index] = { ...tasks[index], ...action.payload.model }
       }
     },
-    // setTasks: (state, action: PayloadAction<{ tasks: Array<TaskType>; todolistId: string }>) => {
-    //   action.payload.tasks.forEach((t) => {
-    //     state[action.payload.todolistId] = [...state[action.payload.todolistId], { ...t, entityStatus: "idle" }]
-    //   })
-    // },
   },
   extraReducers: (builder) => {
     builder
