@@ -1,8 +1,8 @@
 import { addTodolist } from "model/todolistsSlice"
 import { v1 } from "uuid"
-import { addTask, updateTask, removeTask, TasksDomainType, tasksReducer, fetchTasks } from "model/tasksSlice"
+import { addTask, updateTask, TasksDomainType, tasksReducer, fetchTasks, deleteTask } from "model/tasksSlice"
 import { TestAction } from "common/types/test-types"
-import { TaskStatuses, UpdateTaskModelType } from 'api/api';
+import { TaskStatuses } from "api/api"
 
 let startState: TasksDomainType
 let todolistID1: string
@@ -98,7 +98,11 @@ beforeEach(() => {
 })
 
 test("remove correct task", () => {
-  const endState = tasksReducer(startState, removeTask({ todolistId: todolistID2, taskId: "2" }))
+  const action: TestAction<typeof deleteTask.fulfilled> = {
+    type: deleteTask.fulfilled.type,
+    payload: { todolistId: todolistID2, taskId: "2" },
+  }
+  const endState = tasksReducer(startState, action)
   expect(endState[todolistID2][1].id).toBe("3")
 })
 test("tasks should be added for todolist", () => {
@@ -155,37 +159,35 @@ test("correct task should be added to correct array", () => {
   expect(endState["todolistId2"][0].status).toBe(0)
 })
 
-test('status of specified task should be changed', () => {
+test("status of specified task should be changed", () => {
   const action: TestAction<typeof updateTask.fulfilled> = {
     type: updateTask.fulfilled.type,
     payload: {
-      taskId: '2',
-      model: {status: TaskStatuses.New},
-      todolistId: 'todolistId2',
-    }
+      taskId: "2",
+      model: { status: TaskStatuses.New },
+      todolistId: "todolistId2",
+    },
   }
 
-  const endState = tasksReducer(startState, action);
+  const endState = tasksReducer(startState, action)
 
-  expect(endState['todolistId1'][1].status).toBe(TaskStatuses.Completed);
-  expect(endState['todolistId2'][1].status).toBe(TaskStatuses.New);
-});
+  expect(endState["todolistId1"][1].status).toBe(TaskStatuses.Completed)
+  expect(endState["todolistId2"][1].status).toBe(TaskStatuses.New)
+})
 
-test('title of specified task should be changed', () => {
-
+test("title of specified task should be changed", () => {
   const action: TestAction<typeof updateTask.fulfilled> = {
     type: updateTask.fulfilled.type,
-    payload: {taskId: '2', model: {title: 'yogurt'}, todolistId: 'todolistId2'}
+    payload: { taskId: "2", model: { title: "yogurt" }, todolistId: "todolistId2" },
   }
   // const _action = tasksActions.updateTask({taskId: '2', model: {title: 'yogurt'}, todolistId: 'todolistId2'});
 
-  const endState = tasksReducer(startState, action);
+  const endState = tasksReducer(startState, action)
 
-  expect(endState['todolistId1'][1].title).toBe('JS');
-  expect(endState['todolistId2'][1].title).toBe('yogurt');
-  expect(endState['todolistId2'][0].title).toBe('bread');
-});
-
+  expect(endState["todolistId1"][1].title).toBe("JS")
+  expect(endState["todolistId2"][1].title).toBe("yogurt")
+  expect(endState["todolistId2"][0].title).toBe("bread")
+})
 
 // test("status of specified task should be changed", () => {
 //
