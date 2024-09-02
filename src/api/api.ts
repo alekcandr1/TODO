@@ -57,13 +57,15 @@ export const api = {
   getTasks: (listID: string) => {
     return instance.get<GetTasksResponse>(`/todo-lists/${listID}/tasks`)
   },
-  addTask: (listID: string, title: string) => {
-    return instance.post<ResponseType<{ item: TaskType }>>(`/todo-lists/${listID}/tasks`, { title })
+  addTask: (arg: addTaskArg) => {
+    const { todolistId, taskTitle } = arg
+    return instance.post<ResponseType<{ item: TaskType }>>(`/todo-lists/${todolistId}/tasks`, { title: taskTitle })
   },
-  deleteTask: (listID: string, taskID: string) => {
-    return instance.delete<ResponseType>(`/todo-lists/${listID}/tasks/${taskID}`)
+  deleteTask: (arg: { todolistId: string; taskId: string }) => {
+    const { todolistId, taskId } = arg
+    return instance.delete<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
   },
-  updateTask: (listID: string, taskID: string, model: UpdateTaskModelType) => {
+  updateTask: (todolistId: string, taskId: string, model: UpdateTaskModelType) => {
     return instance.put<
       ResponseType<{ item: TaskType }>,
       AxiosResponse<
@@ -71,7 +73,7 @@ export const api = {
           item: TaskType
         }>
       >
-    >(`/todo-lists/${listID}/tasks/${taskID}`, model)
+    >(`/todo-lists/${todolistId}/tasks/${taskId}`, model)
   },
 }
 
@@ -117,12 +119,12 @@ export type TaskType = {
   addedDate: string
 }
 export type UpdateTaskModelType = {
-  title: string
-  description: string
-  status: TaskStatuses
-  priority: TaskPriorities
-  startDate: string
-  deadline: string
+  title?: string
+  description?: string
+  status?: TaskStatuses
+  priority?: TaskPriorities
+  startDate?: string
+  deadline?: string
 }
 export type TasksType = {
   [key: string]: TaskType[]
@@ -141,4 +143,21 @@ export type ErrorType = {
     },
   ]
   error: string
+}
+export type addTaskArg = {
+  todolistId: string
+  taskTitle: string
+}
+
+export type updateTaskArg = {
+  todolistId: string
+  taskId: string
+  model: UpdateTaskModelType
+}
+
+export type LoginParamsType = {
+  email: string
+  password: string
+  rememberMe: boolean
+  captcha?: string
 }

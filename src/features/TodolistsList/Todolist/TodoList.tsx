@@ -6,7 +6,7 @@ import { EditableSpan } from "components/EditableSpan/EditableSpan"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { AppRootStateType, useAppDispatch } from "model/store"
-import { addTaskTC, TasksDomainType } from "model/tasksSlice"
+import { addTask, TasksDomainType } from "model/tasksSlice"
 import {
   changeTodolistFilter,
   changeTodoTitleTC,
@@ -41,7 +41,7 @@ export const TodoList = memo(({ list }: TodoListPropsType) => {
 
   const addTaskHandler = useCallback(
     (taskTitle: string) => {
-      dispatch(addTaskTC(list.id, taskTitle))
+      dispatch(addTask({ todolistId: list.id, taskTitle }))
     },
     [dispatch, list.id],
   )
@@ -80,7 +80,7 @@ export const TodoList = memo(({ list }: TodoListPropsType) => {
         {tasks.map((task) => {
           return (
             <ListItem key={task.id} disableGutters disablePadding className={task.status === 2 ? "is-done" : ""}>
-              <Task key={task.id} task={task} listID={id} />
+              <Task key={task.id} task={task} todolistId={id} />
             </ListItem>
           )
         })}

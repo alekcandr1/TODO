@@ -26,7 +26,7 @@ const meta = {
       order: 1,
       entityStatus: "idle",
     },
-    listID: "todolistId1",
+    todolistId: "todolistId1",
   },
   decorators: [ReduxStoreProviderDecorator],
 } satisfies Meta<typeof Task>

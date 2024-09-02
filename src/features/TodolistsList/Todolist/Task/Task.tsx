@@ -5,53 +5,61 @@ import { EditableSpan } from "components/EditableSpan/EditableSpan"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { ChangeEvent, useCallback } from "react"
-import { deleteTaskTC, TaskDomainType, updateTaskTC } from "model/tasksSlice"
+import { deleteTask, TaskDomainType, updateTask } from "model/tasksSlice"
 import { useAppDispatch } from "model/store"
 
 type TaskProps = {
   task: TaskDomainType
-  listID: string
+  todolistId: string
 }
-export const Task = React.memo(({ task, listID }: TaskProps) => {
+export const Task = React.memo(({ task, todolistId }: TaskProps) => {
   console.log("Task")
   let dispatch = useAppDispatch()
 
   const removeTaskHandler = useCallback(() => {
-    dispatch(deleteTaskTC(listID, task.id))
-  }, [dispatch, listID, task.id])
+    dispatch(deleteTask({ todolistId, taskId: task.id }))
+  }, [dispatch, todolistId, task.id])
 
   const changeTaskStatusHandler = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       let currentStatus
       e.currentTarget.checked ? (currentStatus = 2) : (currentStatus = 0)
       dispatch(
-        updateTaskTC(listID, task.id, {
-          status: currentStatus,
-          title: task.title,
-          description: task.description,
-          priority: task.priority,
-          startDate: task.startDate,
-          deadline: task.deadline,
+        updateTask({
+          todolistId,
+          taskId: task.id,
+          model: {
+            status: currentStatus,
+            title: task.title,
+            description: task.description,
+            priority: task.priority,
+            startDate: task.startDate,
+            deadline: task.deadline,
+          },
         }),
       )
     },
-    [dispatch, listID, task.deadline, task.description, task.id, task.priority, task.startDate, task.title],
+    [dispatch, todolistId, task.deadline, task.description, task.id, task.priority, task.startDate, task.title],
   )
 
   const changeTaskTitleHandler = useCallback(
     (newTitle: string) => {
       dispatch(
-        updateTaskTC(listID, task.id, {
-          status: task.status,
-          title: newTitle,
-          description: task.description,
-          priority: task.priority,
-          startDate: task.startDate,
-          deadline: task.deadline,
+        updateTask({
+          todolistId,
+          taskId: task.id,
+          model: {
+            status: task.status,
+            title: newTitle,
+            description: task.description,
+            priority: task.priority,
+            startDate: task.startDate,
+            deadline: task.deadline,
+          },
         }),
       )
     },
-    [dispatch, listID, task.id, task.status, task.description, task.priority, task.startDate, task.deadline],
+    [dispatch, todolistId, task.id, task.status, task.description, task.priority, task.startDate, task.deadline],
   )
 
   return (
