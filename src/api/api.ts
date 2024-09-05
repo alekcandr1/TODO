@@ -53,7 +53,6 @@ export const api = {
   changeTodoTitle: (listID: string, newTitle: string) => {
     return instance.put<ResponseType>(`/todo-lists/${listID}`, { title: newTitle })
   },
-
   getTasks: (listID: string) => {
     return instance.get<GetTasksResponse>(`/todo-lists/${listID}/tasks`)
   },

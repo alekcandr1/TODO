@@ -12,7 +12,7 @@ import { AppRootStateType, useAppDispatch } from "model/store"
 import { RequestStatusType } from "model/appSlice"
 import { ErrorSnackbar } from "components/ErrorSnackbar/ErrorSnackbar"
 import { Navigate, Outlet } from "react-router-dom"
-import { logoutTC, meTC } from "model/authSlice"
+import { logout, me } from "model/authSlice"
 import CircularProgress from "@mui/material/CircularProgress"
 import { useAppSelector } from "common/hooks/hooks"
 import { selectorAppStatus } from "common/selectors/app.selectors"
@@ -26,7 +26,7 @@ function App() {
   const status = useAppSelector<AppRootStateType, RequestStatusType>(selectorAppStatus)
 
   useEffect(() => {
-    dispatch(meTC())
+    dispatch(me())
   }, [dispatch])
 
   if (!isInitialized) {
@@ -38,7 +38,7 @@ function App() {
   }
 
   const onLogout = () => {
-    dispatch(logoutTC())
+    dispatch(logout())
   }
   const onLogin = () => {
     return <Navigate to={"/login"} />

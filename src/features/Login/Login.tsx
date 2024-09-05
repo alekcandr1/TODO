@@ -10,7 +10,7 @@ import Button from "@mui/material/Button"
 import { useFormik } from "formik"
 import s from "./Login.module.css"
 import { AppRootStateType, useAppDispatch } from "model/store"
-import { loginTC } from "model/authSlice"
+import { login } from "model/authSlice"
 import { Navigate } from "react-router-dom"
 import { useAppSelector } from "common/hooks/hooks"
 import { selectIsLoggedIn } from "common/selectors/auth.selectors"
@@ -47,8 +47,8 @@ export const Login = () => {
 
       return errors
     },
-    onSubmit: (values) => {
-      dispatch(loginTC(values))
+    onSubmit: (data) => {
+      dispatch(login({ data }))
       formik.resetForm()
     },
   })
