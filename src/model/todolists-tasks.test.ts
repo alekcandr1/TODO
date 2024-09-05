@@ -1,12 +1,18 @@
 import { addTodolist, deleteTodolist, TodoListDomainType, todosReducer } from "model/todolistsSlice"
 import { TasksDomainType, tasksReducer } from "model/tasksSlice"
 import { v1 } from "uuid"
+import { TestAction } from "common/types/test-types"
 
 test("ids should be equals", () => {
   const startTasksState: TasksDomainType = {}
   const startTodolistsState: Array<TodoListDomainType> = []
 
-  const action = addTodolist({ todolist: { id: v1(), title: "What to learn", addedDate: "null", order: 1 } })
+  const action: TestAction<typeof addTodolist.fulfilled> = {
+    type: addTodolist.fulfilled.type,
+    payload: {
+      todolist: { id: v1(), title: "What to learn", addedDate: "null", order: 1 },
+    },
+  }
 
   const endTasksState = tasksReducer(startTasksState, action)
   const endTodolistsState = todosReducer(startTodolistsState, action)
@@ -105,7 +111,10 @@ test("property with todolistId should be deleted", () => {
     ],
   }
 
-  const action = deleteTodolist({ id: "todolistId2" })
+  const action: TestAction<typeof deleteTodolist.fulfilled> = {
+    type: deleteTodolist.fulfilled.type,
+    payload: { todolistId: "todolistId2" },
+  }
 
   const endState = tasksReducer(startState, action)
 

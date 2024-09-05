@@ -1,4 +1,4 @@
-import { addTodolist, deleteTodolist, setTodos } from "model/todolistsSlice"
+import { addTodolist, deleteTodolist, fetchTodolists } from "model/todolistsSlice"
 import { addTaskArg, api, STATUS_CODE, TaskType, updateTaskArg, UpdateTaskModelType } from "api/api"
 import { RequestStatusType, setAppStatus } from "model/appSlice"
 import { handleServerAppError, handleServerNetworkError } from "utils/app-utils"
@@ -48,13 +48,6 @@ const slice = createSlice({
           tasks.splice(index, 1)
         }
       })
-      // .addCase(changeTaskEntityStatus.fulfilled, (state, action) => {
-      //   const tasks = state[action.payload.todolistId]
-      //   const index = tasks.findIndex((tl) => tl.id === action.payload.taskId)
-      //   if (index !== -1) {
-      //     tasks[index].entityStatus = action.payload.status
-      //   }
-      // })
       .addCase(updateTask.fulfilled, (state, action) => {
         const tasks = state[action.payload.todolistId]
         const index = tasks.findIndex((tl) => tl.id === action.payload.taskId)
@@ -62,16 +55,16 @@ const slice = createSlice({
           tasks[index] = { ...tasks[index], ...action.payload.model }
         }
       })
-      .addCase(addTodolist, (state, action) => {
+      .addCase(addTodolist.fulfilled, (state, action) => {
         state[action.payload.todolist.id] = []
       })
-      .addCase(deleteTodolist, (state, action) => {
-        delete state[action.payload.id]
-      })
-      .addCase(setTodos, (state, action) => {
-        action.payload.todos.forEach((tl) => {
+      .addCase(fetchTodolists.fulfilled, (state, action) => {
+        action.payload.todolists.forEach((tl) => {
           state[tl.id] = []
         })
+      })
+      .addCase(deleteTodolist.fulfilled, (state, action) => {
+        delete state[action.payload.todolistId]
       })
       .addCase(clearTasksAndTodolists, () => {
         return {}
@@ -94,7 +87,7 @@ export const fetchTasks = createAppAsyncThunk<
     const tasks = res.data.items
     dispatch(setAppStatus({ status: "succeeded" }))
     return { tasks, todolistId }
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleServerNetworkError(error, dispatch)
     return rejectWithValue(null)
   }

@@ -5,7 +5,7 @@ import Grid from "@mui/material/Unstable_Grid2"
 import { Paper } from "@mui/material"
 import { TodoList } from "./Todolist/TodoList"
 import { AppRootStateType, useAppDispatch } from "model/store"
-import { addTodoTC, getTodosTC, TodoListDomainType } from "model/todolistsSlice"
+import { addTodolist, fetchTodolists, TodoListDomainType } from "model/todolistsSlice"
 import { AddItemForm } from "components/AddItemForm/AddItemForm"
 import { Navigate } from "react-router-dom"
 import { useAppSelector } from "common/hooks/hooks"
@@ -21,14 +21,14 @@ export const TodolistsList: React.FC<TodolistsListPropsType> = () => {
     if (!isLoggedIn) {
       return
     }
-    dispatch(getTodosTC())
+    dispatch(fetchTodolists())
   }, [dispatch, isLoggedIn])
 
   let todoLists = useAppSelector<AppRootStateType, TodoListDomainType[]>(selectorTodolists)
 
   const addTodoList = useCallback(
-    (todoListTitle: string) => {
-      dispatch(addTodoTC(todoListTitle))
+    (title: string) => {
+      dispatch(addTodolist({ title }))
     },
     [dispatch],
   )

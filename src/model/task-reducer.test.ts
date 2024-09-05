@@ -1,6 +1,6 @@
 import { addTodolist } from "model/todolistsSlice"
 import { v1 } from "uuid"
-import { addTask, updateTask, TasksDomainType, tasksReducer, fetchTasks, deleteTask } from "model/tasksSlice"
+import { addTask, deleteTask, fetchTasks, TasksDomainType, tasksReducer, updateTask } from "model/tasksSlice"
 import { TestAction } from "common/types/test-types"
 import { TaskStatuses } from "api/api"
 
@@ -226,7 +226,12 @@ test("title of specified task should be changed", () => {
 // })
 
 test("new array should be added when new todolist is added", () => {
-  const action = addTodolist({ todolist: { id: v1(), title: "What to learn", addedDate: "null", order: 1 } })
+  const action: TestAction<typeof addTodolist.fulfilled> = {
+    type: addTodolist.fulfilled.type,
+    payload: {
+      todolist: { id: v1(), title: "What to learn", addedDate: "null", order: 1 },
+    },
+  }
 
   const endState = tasksReducer(startState, action)
 

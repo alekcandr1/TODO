@@ -9,8 +9,8 @@ import { AppRootStateType, useAppDispatch } from "model/store"
 import { addTask, TasksDomainType } from "model/tasksSlice"
 import {
   changeTodolistFilter,
-  changeTodoTitleTC,
-  deleteTodoTC,
+  changeTodolistTitle,
+  deleteTodolist,
   FilterType,
   TodoListDomainType,
 } from "model/todolistsSlice"
@@ -48,20 +48,20 @@ export const TodoList = memo(({ list }: TodoListPropsType) => {
 
   const changeFilterHandler = useCallback(
     (filter: FilterType) => {
-      dispatch(changeTodolistFilter({ id, filter }))
+      dispatch(changeTodolistFilter({ todolistId: id, filter }))
     },
     [dispatch, id],
   )
 
   const changeTodoListTitleHandler = useCallback(
-    (newTitle: string) => {
-      dispatch(changeTodoTitleTC(id, newTitle))
+    (title: string) => {
+      dispatch(changeTodolistTitle({ todolistId: id, title }))
     },
     [dispatch, id],
   )
 
   const removeTodolistHandler = useCallback(() => {
-    dispatch(deleteTodoTC(id))
+    dispatch(deleteTodolist({ todolistId: id }))
   }, [dispatch, id])
 
   return (
