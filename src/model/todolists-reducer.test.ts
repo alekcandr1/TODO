@@ -69,11 +69,7 @@ test("correct todolist should change its name", () => {
 })
 
 test("correct filter of todolist should be changed", () => {
-  const action: TestAction<typeof changeTodolistFilter.fulfilled> = {
-    type: changeTodolistFilter.fulfilled.type,
-    payload: { todolistId: todolistId2, filter: "COMPLETED" },
-  }
-  const endState = todosReducer(startState, action)
+  const endState = todosReducer(startState, changeTodolistFilter({ todolistId: todolistId2, filter: "COMPLETED" }))
 
   expect(endState[0].filter).toBe("ALL")
   expect(endState[1].filter).toBe("COMPLETED")

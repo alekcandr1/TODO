@@ -16,6 +16,12 @@ const slice = createSlice({
         state[index].entityStatus = action.payload.status
       }
     },
+    changeTodolistFilter: (state, action: PayloadAction<{ todolistId: string; filter: FilterType }>) => {
+      const index = state.findIndex((tl) => tl.id === action.payload.todolistId)
+      if (index !== -1) {
+        state[index].filter = action.payload.filter
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -40,12 +46,6 @@ const slice = createSlice({
         const index = state.findIndex((tl) => tl.id === action.payload.todolistId)
         if (index !== -1) {
           state[index].title = action.payload.title
-        }
-      })
-      .addCase(changeTodolistFilter.fulfilled, (state, action) => {
-        const index = state.findIndex((tl) => tl.id === action.payload.todolistId)
-        if (index !== -1) {
-          state[index].filter = action.payload.filter
         }
       })
   },
@@ -142,33 +142,10 @@ export const changeTodolistTitle = createAppAsyncThunk<
     dispatch(changeTodolistStatus({ todolistId, status: "idle" }))
   }
 })
-export const changeTodolistFilter = createAppAsyncThunk<
-  { todolistId: string; filter: FilterType },
-  { todolistId: string; filter: FilterType }
->(`${slice.name}/changeTodolistFilter`, async ({ todolistId, filter }, { dispatch, rejectWithValue }) => {
-  try {
-    dispatch(setAppStatus({ status: "loading" }))
-    dispatch(changeTodolistStatus({ todolistId, status: "loading" }))
-    const res = await api.changeTodoTitle(todolistId, filter)
-
-    if (res.data.resultCode === STATUS_CODE.SUCCESS) {
-      dispatch(setAppStatus({ status: "succeeded" }))
-      return { todolistId, filter }
-    } else {
-      handleServerAppError(res.data, dispatch)
-      return rejectWithValue(null)
-    }
-  } catch (error: unknown) {
-    handleServerNetworkError(error, dispatch)
-    return rejectWithValue(null)
-  } finally {
-    dispatch(changeTodolistStatus({ todolistId, status: "idle" }))
-  }
-})
 
 export const todosReducer = slice.reducer
-export const tasksThunks = { addTodolist, fetchTodolists, deleteTodolist, changeTodolistTitle, changeTodolistFilter }
-export const { changeTodolistStatus } = slice.actions
+export const tasksThunks = { addTodolist, fetchTodolists, deleteTodolist, changeTodolistTitle }
+export const { changeTodolistStatus, changeTodolistFilter } = slice.actions
 
 //types
 export type TodoListDomainType = TodoListType & {
